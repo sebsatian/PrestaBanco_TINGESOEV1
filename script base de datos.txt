@@ -1,0 +1,60 @@
+-- Tabla users
+CREATE TABLE users (
+    id SERIAL PRIMARY KEY,
+    user_type VARCHAR(9) NOT NULL,
+    rut VARCHAR(12) NOT NULL UNIQUE,
+    name VARCHAR(70) NOT NULL,
+    birth_date DATE,
+    token TEXT -- Campo para manejar autenticación o tokens de sesión
+);
+
+-- Tabla savings_account
+CREATE TABLE savings_account (
+    id SERIAL PRIMARY KEY,
+    client_rut VARCHAR(12) NOT NULL, -- Rut del cliente, relacionado con users(rut)
+    creation_date DATE,
+    balance INT CHECK (balance >= 0) -- Balance no puede ser negativo
+);
+
+-- Tabla movements
+CREATE TABLE movements (
+    id SERIAL PRIMARY KEY,
+    account_id INT NOT NULL, -- Relacionado con savings_account (relación en backend)
+    mov_type VARCHAR(3) CHECK (mov_type IN ('DEB', 'CRE')), -- Tipo de movimiento: Débito (DEB) o Crédito (CRE)
+    mov_date DATE NOT NULL,
+    amount INT CHECK (amount > 0) -- Monto positivo
+);
+
+-- Tabla loan_types
+CREATE TABLE loan_types (
+    id SERIAL PRIMARY KEY,
+    maximum_term INT CHECK (maximum_term > 0), -- Plazo máximo en años
+    minimum_term INT CHECK (minimum_term > 0), -- Plazo mínimo en años
+    max_finance FLOAT CHECK (max_finance > 0 AND max_finance <= 100) -- Porcentaje máximo de financiamiento
+);
+
+-- Tabla simulation
+CREATE TABLE simulation (
+    user_id INT NOT NULL, -- ID del usuario
+    loan_type INT NOT NULL, -- Tipo de préstamo
+    property_value INT NOT NULL,
+    loan_amount INT NOT NULL CHECK (loan_amount > 0),
+    annual_interest_rate FLOAT CHECK (annual_interest_rate > 0),
+    years INT CHECK (years > 0)
+);
+
+-- Tabla request
+CREATE TABLE request (
+    id SERIAL PRIMARY KEY,
+    loan_type INT NOT NULL, -- Tipo de préstamo
+    client_rut VARCHAR(12) NOT NULL, -- Rut del cliente
+    current_status VARCHAR(20) NOT NULL, -- Estado de la solicitud
+    income_proof VARCHAR(255), -- Comprobante de ingresos
+    appraisal_certificate VARCHAR(255), -- Certificado de avalúo
+    first_home_deed VARCHAR(255), -- Escritura de la primera vivienda
+    credit_history VARCHAR(255), -- Historial crediticio
+    business_plan VARCHAR(255), -- Plan de negocios
+    loan_amount INT NOT NULL CHECK (loan_amount > 0),
+    years INT NOT NULL CHECK (years > 0),
+    annual_interest_rate FLOAT CHECK (annual_interest_rate > 0)
+);
