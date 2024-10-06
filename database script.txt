@@ -1,5 +1,5 @@
--- Tabla users
-CREATE TABLE users (
+-- Tabla client
+CREATE TABLE client(
     id SERIAL PRIMARY KEY,
     user_type VARCHAR(9) NOT NULL,
     rut VARCHAR(12) NOT NULL UNIQUE,
@@ -20,7 +20,7 @@ CREATE TABLE loan_types (
 
 -- Tabla simulation
 CREATE TABLE simulation (
-    user_id INT NOT NULL, -- ID del usuario
+    client_id INT NOT NULL, -- ID del cliente
     loan_type INT NOT NULL, -- ID del tipo de préstamo
     property_value DECIMAL(10, 2) NOT NULL, -- Valor de la propiedad formateado como decimal
     loan_amount DECIMAL(10, 2) NOT NULL CHECK (loan_amount > 0), -- Monto del préstamo
