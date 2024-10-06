@@ -5,7 +5,7 @@ CREATE TABLE client(
     rut VARCHAR(12) NOT NULL UNIQUE,
     name VARCHAR(70) NOT NULL,
     birth_date DATE,
-    password TEXT -- Corregido el tipo de dato
+    password TEXT 
 );
 
 -- Tabla loan_types
@@ -18,17 +18,18 @@ CREATE TABLE loan_types (
     annual_interest_rate FLOAT
 );
 
--- Tabla simulation
 CREATE TABLE simulation (
+    id SERIAL PRIMARY KEY, -- ID de la simulación, agregado como clave primaria
     client_id INT NOT NULL, -- ID del cliente
     loan_type INT NOT NULL, -- ID del tipo de préstamo
-    property_value DECIMAL(10, 2) NOT NULL, -- Valor de la propiedad formateado como decimal
+    property_value DECIMAL(10, 2) NOT NULL, -- Valor de la propiedad
     loan_amount DECIMAL(10, 2) NOT NULL CHECK (loan_amount > 0), -- Monto del préstamo
     annual_interest_rate FLOAT, -- Tasa de interés anual
     years INT CHECK (years > 0), -- Años
     number_of_payments INT, -- Número de pagos
-    monthly_payment DECIMAL(10, 2) -- Pago mensual formateado como decimal
+    monthly_payment DECIMAL(10, 2) -- Pago mensual
 );
+
 
 -- Tabla request
 -- Los documentos serán links, por eso son tipo VARCHAR
