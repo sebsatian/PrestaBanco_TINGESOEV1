@@ -18,9 +18,6 @@ public class ClientEntity {
     @Column(unique = true, nullable = false)
     private Long id;
 
-    @Column(name = "user_type", nullable = false)
-    private String userType;
-
     @Column(name = "rut", unique = true, nullable = false)
     private String rut;
 

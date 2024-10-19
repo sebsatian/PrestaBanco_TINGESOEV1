@@ -16,6 +16,9 @@ public class LoanTypeEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column
+    private String type;
+
     @Column(name = "maximum_term")
     private int maximumTerm;
 
