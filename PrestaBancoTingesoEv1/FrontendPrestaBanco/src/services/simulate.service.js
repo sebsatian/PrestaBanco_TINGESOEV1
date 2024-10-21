@@ -1,19 +1,18 @@
 // services/simulate.service.js
-import http from '../http-common';
+import httpClient from '../http-common';
 
 const simulateLoan = (simulationData) => {
-  return http.post('/simulation/simulate', simulationData);
+  return httpClient.post('/simulation/simulate', simulationData);
 };
 
 const getSimulationById = (simulationId) => {
-  return http.get(`/simulation/simulate/${simulationId}`);
+  return httpClient.get(`/simulation/simulate/${simulationId}`);
 };
 
 const updateSimulation = (simulationId, updatedSimulation) => {
-  return http.put(`/simulation/change/${simulationId}`, updatedSimulation);
+  return httpClient.put(`/simulation/change/${simulationId}`, updatedSimulation);
 };
 
-// Asegúrate de incluir updateSimulation aquí
 export default {
   simulateLoan,
   getSimulationById,

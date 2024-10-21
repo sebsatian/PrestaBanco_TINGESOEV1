@@ -1,42 +1,55 @@
-import { useState, useEffect } from 'react';
-import PropTypes from 'prop-types';
+import { useEffect, useState } from 'react';
+import { useParams, useNavigate } from 'react-router-dom';
 import simulateService from '../services/simulate.service';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import { useNavigate } from 'react-router-dom';
+import { Modal, Button } from 'react-bootstrap';
 
-const UpdateSimulation = ({ simulationId }) => {
-  const [simulation, setSimulation] = useState(null);
+const SimulationEdit = () => {
+  const { simulationId } = useParams();
+  const [simulation, setSimulation] = useState({
+    rut: '',
+    propertyValue: '',
+    loanType: '',
+    years: 1,
+    percentage: 1,
+  });
+  const [error, setError] = useState('');
+  const [showModal, setShowModal] = useState(false);
   const [maxPercentage, setMaxPercentage] = useState(100);
   const [maxYears, setMaxYears] = useState(52);
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (!simulationId) {
-      console.error('simulationId is required but was not provided.');
-      return;
-    }
-
     const fetchSimulation = async () => {
       try {
         const response = await simulateService.getSimulationById(simulationId);
         const data = response.data;
+
+        if (!data) {
+          throw new Error('No data received');
+        }
+
         setSimulation({
-          propertyValue: data.propertyValue.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.'),
-          loanType: data.loanType.toString(),
-          years: data.years,
-          percentage: data.percentage * 100,
+          rut: data.rut || '',
+          propertyValue: data.simulation.propertyValue ? data.simulation.propertyValue.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.') : '',
+          loanType: data.simulation.loanType ? data.simulation.loanType.toString() : '',
+          years: data.simulation.years || 1,
+          percentage: data.simulation.percentage ? data.simulation.percentage * 100 : 1,
         });
-        handleLoanTypeChange(data.loanType);
+        handleLoanTypeChange(data.simulation.loanType);
       } catch (err) {
-        console.error("Error fetching simulation data: ", err);
+        console.error(err);
+        setError('No se pudo obtener la simulación. Por favor, inténtelo de nuevo más tarde.');
+        setShowModal(true);
       }
     };
+
     fetchSimulation();
   }, [simulationId]);
 
   const formatPropertyValue = (value) => {
     const cleanValue = value.replace(/[^0-9]/g, '');
-    return cleanValue.length > 11 ? simulation?.propertyValue : cleanValue.replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+    return cleanValue.length > 11 ? simulation.propertyValue : `$${cleanValue.replace(/\B(?=(\d{3})+(?!\d))/g, '.')}`;
   };
 
   const handleChange = (e) => {
@@ -54,8 +67,8 @@ const UpdateSimulation = ({ simulationId }) => {
     });
   };
 
-  const handleLoanTypeChange = (loanType) => {
-    switch (loanType) {
+  const handleLoanTypeChange = (value) => {
+    switch (value) {
       case '1':
         setMaxPercentage(80);
         setMaxYears(30);
@@ -76,6 +89,11 @@ const UpdateSimulation = ({ simulationId }) => {
         setMaxPercentage(100);
         setMaxYears(52);
     }
+    setSimulation((prev) => ({
+      ...prev,
+      percentage: 1,
+      years: 1,
+    }));
   };
 
   const handleSliderChange = (e) => {
@@ -84,12 +102,12 @@ const UpdateSimulation = ({ simulationId }) => {
   };
 
   const handleSubmit = async (e) => {
-    if (!simulationId) {
-      return;
-    }
     e.preventDefault();
+    setError('');
 
     if (!simulation.propertyValue || !simulation.loanType) {
+      setError('Todos los campos son obligatorios. Por favor, complete todos los campos.');
+      setShowModal(true);
       return;
     }
 
@@ -105,19 +123,30 @@ const UpdateSimulation = ({ simulationId }) => {
       if (response?.data) {
         navigate(`/simulation/simulate/${simulationId}`);
       }
-    } catch {
-      // Error handling
+    } catch (err) {
+      console.error('Error updating simulation:', err);
+      setError('No se pudo actualizar la simulación. Por favor, inténtelo de nuevo más tarde.');
+      setShowModal(true);
     }
   };
 
-  if (!simulation) {
-    return <div>Cargando...</div>;
-  }
+  const handleCloseModal = () => setShowModal(false);
 
   return (
-    <div className="container mt-3" style={{ paddingTop: '1rem', maxWidth: '1000px', maxHeight: '90vh', overflowY: 'hidden' }}>  
+    <div className="container mt-3" style={{ paddingTop: '1rem', maxHeight: '90vh', overflowY: 'hidden' }}>  
       <h2>Editar Simulación de Crédito</h2>
       <form onSubmit={handleSubmit} className="needs-validation" noValidate>
+        <div className="form-group">
+          <label htmlFor="rut">RUT</label>
+          <input
+            type="text"
+            className="form-control"
+            id="rut"
+            name="rut"
+            value={simulation.rut}
+            disabled
+          />
+        </div>
         <div className="form-group mt-3">
           <label htmlFor="propertyValue">Valor de la Propiedad</label>
           <input
@@ -195,12 +224,22 @@ const UpdateSimulation = ({ simulationId }) => {
           <button type="submit" className="btn btn-primary">Guardar Cambios</button>
         </div>
       </form>
+
+      {error && (
+        <Modal show={showModal} onHide={handleCloseModal}>
+          <Modal.Header closeButton>
+            <Modal.Title>Error</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            {error}
+          </Modal.Body>
+          <Modal.Footer>
+            <Button variant="secondary" onClick={handleCloseModal}>Cerrar</Button>
+          </Modal.Footer>
+        </Modal>
+      )}
     </div>
   );
 };
 
-export default UpdateSimulation;
-
-UpdateSimulation.propTypes = {
-  simulationId: PropTypes.number.isRequired,
-};
+export default SimulationEdit;

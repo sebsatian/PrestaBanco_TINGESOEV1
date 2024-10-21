@@ -25,10 +25,8 @@ public class SimulationController {
     @Autowired
     private ClientRepository clientRepository;
 
-
-
     @PostMapping("/simulate")
-    public ResponseEntity<?> createSimulation(@RequestBody Map<String, Object> simulationData) {
+    public ResponseEntity<?> createOrUpdateSimulation(@RequestBody Map<String, Object> simulationData) {
         try {
             System.out.println("Received simulation data: " + simulationData);
 
@@ -74,13 +72,26 @@ public class SimulationController {
             float percentage = percentageNum.floatValue();
             System.out.println("Percentage: " + percentage);
 
-            // Create the simulation
-            SimulationEntity simulation = simulationService.createSimulation(rut, propertyValue, loanType, years, percentage);
+            // Check if the user already has a simulation
+            ClientEntity client = clientRepository.findClientByRut(rut);
+            if (client == null) {
+                return ResponseEntity.status(404).body("Client not found with the provided RUT");
+            }
+
+            Optional<SimulationEntity> existingSimulationOpt = simulationRepository.findByClientId(client.getId());
+            SimulationEntity simulation;
+            if (existingSimulationOpt.isPresent()) {
+                // Update the existing simulation
+                simulation = simulationService.updateSimulation(existingSimulationOpt.get().getId(), rut, propertyValue, loanType, years, percentage);
+            } else {
+                // Create a new simulation
+                simulation = simulationService.createSimulation(rut, propertyValue, loanType, years, percentage);
+            }
+
             return ResponseEntity.ok(simulation);
         } catch (IllegalArgumentException e) {
             return ResponseEntity.status(404).body(e.getMessage());
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace(); // Print the exception for debugging
             return ResponseEntity.status(500).body("An unexpected error occurred");
         }
@@ -106,9 +117,47 @@ public class SimulationController {
             return ResponseEntity.status(500).body("An unexpected error occurred");
         }
     }
+
     @PutMapping("/change/{simulationId}")
-    public ResponseEntity<?> updateSimulation(@PathVariable Long simulationId, @RequestBody SimulationEntity updatedSimulation) {
+    public ResponseEntity<?> updateSimulation(@PathVariable Long simulationId, @RequestBody Map<String, Object> simulationData) {
         try {
+            // Validate the request body
+            if (!simulationData.containsKey("propertyValue") ||
+                    !simulationData.containsKey("loanType") || !simulationData.containsKey("years") ||
+                    !simulationData.containsKey("percentage")) {
+                return ResponseEntity.badRequest().body("All fields are required");
+            }
+
+            // Extract the simulation data
+            Number propertyValueNum = (Number) simulationData.get("propertyValue");
+            if (propertyValueNum == null) {
+                return ResponseEntity.badRequest().body("Property value is required");
+            }
+            int propertyValue = propertyValueNum.intValue();
+            System.out.println("Property Value: " + propertyValue);
+
+            Number loanTypeNum = (Number) simulationData.get("loanType");
+            if (loanTypeNum == null) {
+                return ResponseEntity.badRequest().body("Loan type is required");
+            }
+            Long loanType = loanTypeNum.longValue();
+            System.out.println("Loan Type: " + loanType);
+
+            Number yearsNum = (Number) simulationData.get("years");
+            if (yearsNum == null) {
+                return ResponseEntity.badRequest().body("Years are required");
+            }
+            int years = yearsNum.intValue();
+            System.out.println("Years: " + years);
+
+            Number percentageNum = (Number) simulationData.get("percentage");
+            if (percentageNum == null) {
+                return ResponseEntity.badRequest().body("Percentage is required");
+            }
+            float percentage = percentageNum.floatValue();
+            System.out.println("Percentage: " + percentage);
+
+            // Find the existing simulation by ID
             SimulationEntity existingSimulation = simulationRepository.findById(simulationId)
                     .orElseThrow(() -> new IllegalArgumentException("Simulation not found with the provided ID"));
 
@@ -117,13 +166,14 @@ public class SimulationController {
                     .orElseThrow(() -> new IllegalArgumentException("Client not found for the provided simulation"))
                     .getRut();
 
-            // Llamar al servicio para recalcular la simulación utilizando el RUT y la información actualizada
-            SimulationEntity updatedSimulationEntity = simulationService.createSimulation(
+            // Llamar al servicio para actualizar la simulación utilizando el RUT y la información actualizada
+            SimulationEntity updatedSimulationEntity = simulationService.updateSimulation(
+                    simulationId,
                     rut,
-                    updatedSimulation.getPropertyValue().intValue(),
-                    (long) updatedSimulation.getLoanType(),
-                    updatedSimulation.getYears(),
-                    updatedSimulation.getPercentage()
+                    propertyValue,
+                    loanType,
+                    years,
+                    percentage
             );
 
             return ResponseEntity.ok(updatedSimulationEntity);
@@ -133,9 +183,4 @@ public class SimulationController {
             return ResponseEntity.status(500).body("An unexpected error occurred");
         }
     }
-
 }
-
-
-
-

@@ -11,4 +11,6 @@ import java.util.Optional;
 public interface ClientRepository extends JpaRepository<ClientEntity, Long> {
     Optional<ClientEntity> findByRut(String rut);
     ClientEntity findClientByRut(@Param("rut") String rut);
+
+    String findRutById(int clientId);
 }

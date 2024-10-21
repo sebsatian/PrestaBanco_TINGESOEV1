@@ -5,6 +5,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import jakarta.persistence.*;
 
+import java.math.BigDecimal;
+
 @Entity
 @Table(name = "loan_types")
 @Data
@@ -22,15 +24,15 @@ public class LoanTypeEntity {
     @Column(name = "maximum_term")
     private int maximumTerm;
 
-    @Column(name = "max_finance")
-    private float maxFinance;
+    @Column(name = "max_finance", precision = 5, scale = 2)
+    private BigDecimal maxFinance;
 
-    @Column(name = "min_interest_rate")
-    private float minInterestRate;
+    @Column(name = "min_interest_rate", precision = 5, scale = 2)
+    private BigDecimal minInterestRate;
 
-    @Column(name = "max_interest_rate")
-    private float maxInterestRate;
+    @Column(name = "max_interest_rate", precision = 5, scale = 2)
+    private BigDecimal maxInterestRate;
 
-    @Column(name = "annual_interest_rate")
-    private float annualInterestRate;
+    @Column(name = "annual_interest_rate", precision = 5, scale = 2)
+    private BigDecimal annualInterestRate;
 }

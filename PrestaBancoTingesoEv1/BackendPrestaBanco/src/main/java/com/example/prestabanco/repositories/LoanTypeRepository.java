@@ -14,4 +14,6 @@ public interface LoanTypeRepository extends JpaRepository<LoanTypeEntity, Long> 
 
 
 
+
+
 }

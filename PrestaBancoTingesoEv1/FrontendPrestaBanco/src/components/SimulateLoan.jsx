@@ -104,7 +104,7 @@ const SimulateLoan = () => {
     try {
       const response = await simulateService.simulateLoan(requestPayload);
       if (response?.data) {
-        // Redirect to the newly created simulation page using the ID from the response
+        // Redirect to the newly created or updated simulation page using the ID from the response
         const simulationId = response.data.id; // Assuming the response contains the ID
         navigate(`/simulation/simulate/${simulationId}`);
       }
@@ -223,7 +223,7 @@ const SimulateLoan = () => {
         </div>
       </form>
 
-      {error === 'RUT inválido o usuario no registrado' && (
+      {error && (
         <Modal show={showModal} onHide={handleCloseModal}>
           <Modal.Header closeButton>
             <Modal.Title>Error</Modal.Title>
@@ -232,8 +232,7 @@ const SimulateLoan = () => {
             {error}
           </Modal.Body>
           <Modal.Footer>
-            <Button variant="secondary" onClick={handleCloseModal}>Intentar de nuevo</Button>
-            <Button variant="primary" onClick={() => navigate('/register')}>Registrar Usuario</Button>
+            <Button variant="secondary" onClick={handleCloseModal}>Cerrar</Button>
           </Modal.Footer>
         </Modal>
       )}

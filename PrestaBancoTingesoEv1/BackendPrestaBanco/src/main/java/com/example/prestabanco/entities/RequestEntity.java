@@ -32,14 +32,25 @@ public class RequestEntity {
     @Column(name = "appraisal_certificate")
     private String appraisalCertificate;
 
-    @Column(name = "first_home_deed")
-    private String firstHomeDeed;
-
+    // Null if loan type is not 3 or 4
     @Column(name = "credit_history")
     private String creditHistory;
 
+    // Null if loan type is not 2
+    @Column(name = "first_home_deed")
+    private String firstHomeDeed;
+
+    // Null if loan type is not 3
+    @Column(name = "finantial_statement")
+    private String finantialStatement;
+
+    //Null if loan type is not 3
     @Column(name = "business_plan")
     private String businessPlan;
+
+    // Null if loan type is not 4
+    @Column(name = "remodeling_budget")
+    private String remodelingBudget;
 
     @Column(name = "loan_amount", nullable = false)
     private BigDecimal loanAmount;
