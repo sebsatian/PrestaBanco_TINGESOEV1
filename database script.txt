@@ -32,24 +32,54 @@ CREATE TABLE simulation (
     final_amount DECIMAL(12, 2) -- Valor final a pagar
 );
 
-
--- Tabla request
--- Los documentos serán links, por eso son tipo VARCHAR
+-- Tabla request (tabla base)
 CREATE TABLE request (
     id SERIAL PRIMARY KEY,
     loan_type INT NOT NULL, -- ID del tipo de préstamo
     client_rut VARCHAR(12) NOT NULL, -- Rut del cliente
     current_status VARCHAR(20) NOT NULL, -- Estado de la solicitud
-    income_proof VARCHAR(255), -- Comprobante de ingresos
-    appraisal_certificate VARCHAR(255), -- Certificado de avalúo
-    first_home_deed VARCHAR(255), -- Escritura de la primera vivienda
-    credit_history VARCHAR(255), -- Historial crediticio
-    finantial_statement VARCHAR(255), -- Estado fianciero del negocio
-    business_plan VARCHAR(255), -- Plan de negocios
-    remodeling_budget VARCHAR(255), -- Presupuesto de remodelación
     loan_amount DECIMAL(10, 2) NOT NULL CHECK (loan_amount > 0), -- Monto del préstamo
     years INT NOT NULL CHECK (years > 0), -- Años
     annual_interest_rate FLOAT CHECK (annual_interest_rate > 0) -- Tasa de interés anual
+);
+
+-- Tabla first_home_request (extiende request)
+CREATE TABLE first_home_request (
+    id SERIAL PRIMARY KEY,
+    request_id INT REFERENCES request(id),
+    income_proof BYTEA, -- Comprobante de ingresos
+    appraisal_certificate BYTEA, -- Certificado de avalúo
+    credit_history BYTEA -- Historial crediticio
+);
+
+-- Tabla second_home_request (extiende request)
+CREATE TABLE second_home_request (
+    id SERIAL PRIMARY KEY,
+    request_id INT REFERENCES request(id),
+    income_proof BYTEA, -- Comprobante de ingresos
+    appraisal_certificate BYTEA, -- Certificado de avalúo
+    first_home_deed BYTEA, -- Escritura de la primera vivienda
+    credit_history BYTEA -- Historial crediticio
+);
+
+-- Tabla business_request (extiende request)
+CREATE TABLE business_request (
+    id SERIAL PRIMARY KEY,
+    request_id INT REFERENCES request(id),
+    income_proof BYTEA, -- Comprobante de ingresos
+    appraisal_certificate BYTEA, -- Certificado de avalúo
+    credit_history BYTEA, -- Historial crediticio
+    finantial_statement BYTEA, -- Estado financiero del negocio
+    business_plan BYTEA -- Plan de negocios
+);
+
+-- Tabla remodeling_request (extiende request)
+CREATE TABLE remodeling_request (
+    id SERIAL PRIMARY KEY,
+    request_id INT REFERENCES request(id),
+    income_proof BYTEA, -- Comprobante de ingresos
+    appraisal_certificate BYTEA, -- Certificado de avalúo
+    remodeling_budget BYTEA -- Presupuesto de remodelación
 );
 
 -- Tabla evaluation

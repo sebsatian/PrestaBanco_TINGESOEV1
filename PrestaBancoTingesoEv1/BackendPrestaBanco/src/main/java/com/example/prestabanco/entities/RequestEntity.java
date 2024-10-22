@@ -4,13 +4,14 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import jakarta.persistence.*;
+
 import java.math.BigDecimal;
 
-@Entity
-@Table(name = "request")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@Entity
+@Inheritance(strategy = InheritanceType.JOINED)
 public class RequestEntity {
 
     @Id
@@ -26,31 +27,13 @@ public class RequestEntity {
     @Column(name = "current_status", nullable = false)
     private String currentStatus;
 
+    @Lob
     @Column(name = "income_proof")
-    private String incomeProof;
+    private byte[] incomeProof;
 
+    @Lob
     @Column(name = "appraisal_certificate")
-    private String appraisalCertificate;
-
-    // Null if loan type is not 3 or 4
-    @Column(name = "credit_history")
-    private String creditHistory;
-
-    // Null if loan type is not 2
-    @Column(name = "first_home_deed")
-    private String firstHomeDeed;
-
-    // Null if loan type is not 3
-    @Column(name = "finantial_statement")
-    private String finantialStatement;
-
-    //Null if loan type is not 3
-    @Column(name = "business_plan")
-    private String businessPlan;
-
-    // Null if loan type is not 4
-    @Column(name = "remodeling_budget")
-    private String remodelingBudget;
+    private byte[] appraisalCertificate;
 
     @Column(name = "loan_amount", nullable = false)
     private BigDecimal loanAmount;
