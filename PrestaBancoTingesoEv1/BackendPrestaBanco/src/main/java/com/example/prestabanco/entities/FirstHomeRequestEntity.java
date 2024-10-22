@@ -15,6 +15,6 @@ import jakarta.persistence.*;
 public class FirstHomeRequestEntity extends RequestEntity {
 
     @Lob
-    @Column(name = "credit_history")
+    @Column(name = "credit_history", columnDefinition = "BYTEA")
     private byte[] creditHistory;
 }

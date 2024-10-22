@@ -144,23 +144,3 @@ VALUES
 -- Remodelación
 (4, 'Remodelación', 15, 0.50, 4.5, 6.0, 6.0);
 
-
--- Primera Vivienda
-UPDATE loan_types
-SET type = 'Primera Vivienda', maximum_term = 30, max_finance = 0.80, min_interest_rate = 3.5, max_interest_rate = 5.0, annual_interest_rate = 5.0
-WHERE id = 1;
-
--- Segunda Vivienda
-UPDATE loan_types
-SET type = 'Segunda Vivienda', maximum_term = 20, max_finance = 0.70, min_interest_rate = 4.0, max_interest_rate = 6.0, annual_interest_rate = 6.0
-WHERE id = 2;
-
--- Propiedades Comerciales
-UPDATE loan_types
-SET type = 'Propiedades Comerciales', maximum_term = 25, max_finance = 0.60, min_interest_rate = 5.0, max_interest_rate = 7.0, annual_interest_rate = 7.0
-WHERE id = 3;
-
--- Remodelación
-UPDATE loan_types
-SET type = 'Remodelación', maximum_term = 15, max_finance = 0.50, min_interest_rate = 4.5, max_interest_rate = 6.0, annual_interest_rate = 6.0
-WHERE id = 4;

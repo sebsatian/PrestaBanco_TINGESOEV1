@@ -15,6 +15,6 @@ import jakarta.persistence.*;
 public class RemodelingRequestEntity extends RequestEntity {
 
     @Lob
-    @Column(name = "remodeling_budget")
+    @Column(name = "remodeling_budget", columnDefinition = "BYTEA")
     private byte[] remodelingBudget;
 }

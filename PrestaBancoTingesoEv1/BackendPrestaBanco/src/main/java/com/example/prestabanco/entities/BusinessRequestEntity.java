@@ -15,14 +15,14 @@ import jakarta.persistence.*;
 public class BusinessRequestEntity extends RequestEntity {
 
     @Lob
-    @Column(name = "credit_history")
+    @Column(name = "credit_history", columnDefinition = "BYTEA")
     private byte[] creditHistory;
 
     @Lob
-    @Column(name = "finantial_statement")
+    @Column(name = "finantial_statement", columnDefinition = "BYTEA")
     private byte[] finantialStatement;
 
     @Lob
-    @Column(name = "business_plan")
+    @Column(name = "business_plan", columnDefinition = "BYTEA")
     private byte[] businessPlan;
 }

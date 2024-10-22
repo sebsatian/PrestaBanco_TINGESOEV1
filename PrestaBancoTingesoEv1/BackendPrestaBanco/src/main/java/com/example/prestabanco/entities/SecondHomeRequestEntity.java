@@ -15,10 +15,10 @@ import jakarta.persistence.*;
 public class SecondHomeRequestEntity extends RequestEntity {
 
     @Lob
-    @Column(name = "first_home_deed")
+    @Column(name = "first_home_deed", columnDefinition = "BYTEA")
     private byte[] firstHomeDeed;
 
     @Lob
-    @Column(name = "credit_history")
+    @Column(name = "credit_history", columnDefinition = "BYTEA")
     private byte[] creditHistory;
 }

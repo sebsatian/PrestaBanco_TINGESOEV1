@@ -28,11 +28,11 @@ public class RequestEntity {
     private String currentStatus;
 
     @Lob
-    @Column(name = "income_proof")
+    @Column(name = "income_proof", columnDefinition = "BYTEA")
     private byte[] incomeProof;
 
     @Lob
-    @Column(name = "appraisal_certificate")
+    @Column(name = "appraisal_certificate", columnDefinition = "BYTEA")
     private byte[] appraisalCertificate;
 
     @Column(name = "loan_amount", nullable = false)
