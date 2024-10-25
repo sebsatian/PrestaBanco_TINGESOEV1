@@ -12,11 +12,7 @@ import jakarta.persistence.*;
 @AllArgsConstructor
 @Entity
 @Table(name = "business_request")
-public class BusinessRequestEntity extends RequestEntity {
-
-    @Lob
-    @Column(name = "credit_history", columnDefinition = "BYTEA")
-    private byte[] creditHistory;
+public class BusinessReqEntity extends RequestEntity {
 
     @Lob
     @Column(name = "finantial_statement", columnDefinition = "BYTEA")
@@ -25,4 +21,8 @@ public class BusinessRequestEntity extends RequestEntity {
     @Lob
     @Column(name = "business_plan", columnDefinition = "BYTEA")
     private byte[] businessPlan;
+
+    public void setFinancialStatement(byte[] financialStatement) {
+        this.finantialStatement = financialStatement;
+    }
 }

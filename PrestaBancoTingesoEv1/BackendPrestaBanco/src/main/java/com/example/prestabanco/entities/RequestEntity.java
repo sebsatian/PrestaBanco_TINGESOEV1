@@ -6,6 +6,8 @@ import lombok.NoArgsConstructor;
 import jakarta.persistence.*;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Data
 @NoArgsConstructor
@@ -20,6 +22,9 @@ public class RequestEntity {
 
     @Column(name = "loan_type", nullable = false)
     private int loanType;
+
+    @Column(name = "creation_date", nullable = false)
+    private LocalDateTime creationDate;
 
     @Column(name = "client_rut", nullable = false)
     private String clientRut;
@@ -43,4 +48,11 @@ public class RequestEntity {
 
     @Column(name = "annual_interest_rate", nullable = false)
     private float annualInterestRate;
+
+    @Column(name = "monthly_payment", nullable = false)
+    private BigDecimal monthlyPayment;
+
+    @Column(name = "monthly_income", nullable = false)
+    private BigDecimal monthlyIncome;
+
 }

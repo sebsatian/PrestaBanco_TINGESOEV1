@@ -12,7 +12,7 @@ import jakarta.persistence.*;
 @AllArgsConstructor
 @Entity
 @Table(name = "second_home_request")
-public class SecondHomeRequestEntity extends RequestEntity {
+public class SecondHomeReqEntity extends RequestEntity {
 
     @Lob
     @Column(name = "first_home_deed", columnDefinition = "BYTEA")
@@ -21,4 +21,8 @@ public class SecondHomeRequestEntity extends RequestEntity {
     @Lob
     @Column(name = "credit_history", columnDefinition = "BYTEA")
     private byte[] creditHistory;
+
+    @Lob
+    @Column(name = "job_conctract", columnDefinition = "BYTEA")
+    private byte[] jobConctract;
 }

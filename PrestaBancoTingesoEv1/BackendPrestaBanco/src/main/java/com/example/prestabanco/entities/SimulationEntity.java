@@ -17,34 +17,34 @@ public class SimulationEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id; // This is the primary key
 
-    @Column(name = "client_id", nullable = false) // This is a foreign key
+    @Column(name = "client_id", nullable = false)
     private int clientId;
 
-    @Column(name = "loan_type", nullable = false) // This is a foreign key
+    @Column(name = "loan_type", nullable = false)
     private int loanType;
 
     @Column(name = "property_value", nullable = false)
-    private BigDecimal propertyValue;// Valor total propiedad
+    private BigDecimal propertyValue;
 
     @Column(name = "loan_amount", nullable = false)
-    private BigDecimal loanAmount; // Monto del préstamo
+    private BigDecimal loanAmount;
 
     @Column(name = "annual_interest_rate")
-    private float annualInterestRate; // Tasa de interés anual
+    private float annualInterestRate;
 
     @Column(name = "years", nullable = false)
     private int years; // Plazo en años
 
     @Column(name = "number_of_payments")
-    private int numberOfPayments; // Número total de pagos
+    private int numberOfPayments;
 
     @Column(name = "monthly_payment")
-    private BigDecimal monthlyPayment; // Pago mensual
+    private BigDecimal monthlyPayment;
 
     @Column(name = "percentage")
-    private float percentage; // Porcentaje del valor de la propiedad
+    private float percentage;
 
     @Column(name = "final_amount")
-    private BigDecimal finalAmount; // Monto final a pagar
+    private BigDecimal finalAmount;
 
 }

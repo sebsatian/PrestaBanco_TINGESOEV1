@@ -11,10 +11,10 @@ import jakarta.persistence.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "first_home_request")
-public class FirstHomeRequestEntity extends RequestEntity {
+@Table(name = "remodeling_request")
+public class RemodelingReqEntity extends RequestEntity {
 
     @Lob
-    @Column(name = "credit_history", columnDefinition = "BYTEA")
-    private byte[] creditHistory;
+    @Column(name = "remodeling_budget", columnDefinition = "BYTEA")
+    private byte[] remodelingBudget;
 }
