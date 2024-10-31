@@ -24,7 +24,7 @@ public class EvaluationEntity {
     @Column(name = "balance", nullable = false)
     private BigDecimal balance;
 
-    @Column(name = "minimum_balance", nullable = false)
+    @Column(name = "minimum_balance")
     private BigDecimal minimumBalance;
 
     @Column(name = "balance_12_months_ago", nullable = false)
@@ -63,7 +63,7 @@ public class EvaluationEntity {
     @Column(name = "sum_all_debts", nullable = false)
     private BigDecimal sumAllDebts;
 
-    @Column(name = "cost_to_income_ratio", nullable = false)
+    @Column(name = "cost_to_income_ratio")
     private boolean costToIncomeRatio;
 
     @Column(name = "credit_history", nullable = false)
@@ -72,9 +72,9 @@ public class EvaluationEntity {
     @Column(name = "job_status", nullable = false)
     private boolean jobStatus;
 
-    @Column(name = "debt_to_income_ratio", nullable = false)
+    @Column(name = "debt_to_income_ratio")
     private boolean debtToIncomeRatio;
 
-    @Column(name = "in_age", nullable = false)
+    @Column(name = "in_age")
     private boolean inAge;
 }

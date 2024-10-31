@@ -9,7 +9,7 @@ const SimulationEdit = () => {
   const [simulation, setSimulation] = useState({
     rut: '',
     propertyValue: '',
-    loanType: '',
+    loanType: 0,
     years: 1,
     percentage: 1,
   });
@@ -32,7 +32,7 @@ const SimulationEdit = () => {
         setSimulation({
           rut: data.rut || '',
           propertyValue: data.simulation.propertyValue ? data.simulation.propertyValue.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.') : '',
-          loanType: data.simulation.loanType ? data.simulation.loanType.toString() : '',
+          loanType: data.simulation.loanType || 0,
           years: data.simulation.years || 1,
           percentage: data.simulation.percentage ? data.simulation.percentage * 100 : 1,
         });
@@ -59,8 +59,9 @@ const SimulationEdit = () => {
       if (name === 'propertyValue') {
         return { ...prev, [name]: formatPropertyValue(value) };
       } else if (name === 'loanType') {
-        handleLoanTypeChange(value);
-        return { ...prev, loanType: value, percentage: 1, years: 1 };
+        const numericLoanType = parseInt(value, 10);
+        handleLoanTypeChange(numericLoanType);
+        return { ...prev, loanType: numericLoanType, percentage: 1, years: 1 };
       } else {
         return { ...prev, [name]: value };
       }
@@ -69,19 +70,19 @@ const SimulationEdit = () => {
 
   const handleLoanTypeChange = (value) => {
     switch (value) {
-      case '1':
+      case 1:
         setMaxPercentage(80);
         setMaxYears(30);
         break;
-      case '2':
+      case 2:
         setMaxPercentage(70);
         setMaxYears(20);
         break;
-      case '3':
+      case 3:
         setMaxPercentage(60);
         setMaxYears(25);
         break;
-      case '4':
+      case 4:
         setMaxPercentage(50);
         setMaxYears(15);
         break;
@@ -113,7 +114,7 @@ const SimulationEdit = () => {
 
     const requestPayload = {
       propertyValue: parseInt(simulation.propertyValue.replace(/[^0-9]/g, ''), 10),
-      loanType: parseInt(simulation.loanType, 10),
+      loanType: simulation.loanType,
       years: parseInt(simulation.years, 10),
       percentage: parseFloat(simulation.percentage) / 100,
     };
@@ -175,10 +176,10 @@ const SimulationEdit = () => {
             required
           >
             <option value="" disabled>Seleccione el tipo de préstamo...</option>
-            <option value="1">Primera vivienda</option>
-            <option value="2">Segunda vivienda</option>
-            <option value="3">Propiedades comerciales</option>
-            <option value="4">Remodelación</option>
+            <option value={1}>Primera vivienda</option>
+            <option value={2}>Segunda vivienda</option>
+            <option value={3}>Propiedades comerciales</option>
+            <option value={4}>Remodelación</option>
           </select>
           <div className="invalid-feedback">
             Por favor seleccione un tipo de préstamo válido.
@@ -199,7 +200,7 @@ const SimulationEdit = () => {
           />
           <div>{simulation.years} {parseInt(simulation.years, 10) === 1 ? 'año' : 'años'}</div>
           <div className="invalid-feedback">
-            Por favor ingrese una cantidad de años válida (1-{maxYears}).
+            Por favor ingrese una cantidad de años válida (1-{maxYears}). 
           </div>
         </div>
         <div className="form-group mt-3">

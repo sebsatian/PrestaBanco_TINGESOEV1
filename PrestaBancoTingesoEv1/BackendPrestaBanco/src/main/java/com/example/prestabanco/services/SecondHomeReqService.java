@@ -16,8 +16,13 @@ public class SecondHomeReqService {
     private SecondHomeReqRepository secondHomeReqRepository;
     @Autowired
     private ClientRepository clientRepository;
-    public SecondHomeReqEntity createSecondHomeRequest(SimulationEntity simulation, byte[] appraisalCertificate,
-        byte[] incomeProof, byte[] jobContract, byte[] creditHistory, byte[] firstHomeDeed, BigDecimal monthlyIncome) {
+    public SecondHomeReqEntity createSecondHomeRequest(SimulationEntity simulation,
+                                                       byte[] appraisalCertificate,
+                                                       byte[] incomeProof,
+                                                       byte[] jobContract,
+                                                       byte[] creditHistory,
+                                                       byte[] firstHomeDeed,
+                                                       BigDecimal monthlyIncome) {
         int loanType = 2;
         SecondHomeReqEntity secondHomeRequest = new SecondHomeReqEntity();
 
@@ -32,7 +37,7 @@ public class SecondHomeReqService {
         secondHomeRequest.setLoanAmount(simulation.getLoanAmount());
         secondHomeRequest.setYears(simulation.getYears());
         secondHomeRequest.setCurrentStatus("En revisión inicial");
-        secondHomeRequest.setAnnualInterestRate(simulation.getAnnualInterestRate());
+        secondHomeRequest.setAnnualInterestRate(BigDecimal.valueOf(simulation.getAnnualInterestRate()));
         secondHomeRequest.setMonthlyPayment(simulation.getMonthlyPayment());
         secondHomeRequest.setMonthlyIncome(monthlyIncome);
         secondHomeRequest.setFirstHomeDeed(firstHomeDeed);

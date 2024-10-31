@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import clientService from '../services/client.service';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { Modal, Button } from 'react-bootstrap';
+import '../styles/RegisterClient.css';
 
 const RegisterClient = () => {
   const [client, setClient] = useState({

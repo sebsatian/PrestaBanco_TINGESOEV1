@@ -13,12 +13,16 @@ import java.math.BigDecimal;
 public class FirstHomeReqService {
 
     @Autowired
-    private FirstHomeReqRepository firstHomeRequestRepository;
+    private FirstHomeReqRepository firstHomeReqRepository;
     @Autowired
     private ClientRepository clientRepository;
 
-    public FirstHomeReqEntity createFirstHomeRequest(SimulationEntity simulation, byte[] appraisalCertificate,
-                                                     byte[] incomeProof, byte[] jobContract, byte[] creditHistory, BigDecimal monthlyIncome) {
+    public FirstHomeReqEntity createFirstHomeRequest(SimulationEntity simulation,
+                                                     byte[] appraisalCertificate,
+                                                     byte[] incomeProof,
+                                                     byte[] jobContract,
+                                                     byte[] creditHistory,
+                                                     BigDecimal monthlyIncome) {
         int loanType = 1;
         String rut = clientRepository.getClientRutById((long) simulation.getClientId());
         FirstHomeReqEntity firstHomeRequest = new FirstHomeReqEntity();
@@ -32,11 +36,11 @@ public class FirstHomeReqService {
         firstHomeRequest.setLoanAmount(simulation.getLoanAmount());
         firstHomeRequest.setYears(simulation.getYears());
         firstHomeRequest.setCurrentStatus("En revisión inicial");
-        firstHomeRequest.setAnnualInterestRate(simulation.getAnnualInterestRate());
+        firstHomeRequest.setAnnualInterestRate(BigDecimal.valueOf(simulation.getAnnualInterestRate()));
         firstHomeRequest.setMonthlyPayment(simulation.getMonthlyPayment());
         firstHomeRequest.setMonthlyIncome(monthlyIncome);
 
-        return firstHomeRequestRepository.save(firstHomeRequest);
+        return firstHomeReqRepository.save(firstHomeRequest);
 
 
 

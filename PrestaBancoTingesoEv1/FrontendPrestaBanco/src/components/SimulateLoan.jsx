@@ -18,6 +18,11 @@ const SimulateLoan = () => {
   const [maxYears, setMaxYears] = useState(52);
   const navigate = useNavigate();
 
+  const handleRegisterRedirect = () => {
+    setShowModal(false);
+    navigate('/register'); // Cambia '/register' por la ruta correcta a tu página de registro
+};
+
   const formatRUT = (rut) => {
     const cleanRUT = rut.replace(/[^0-9Kk]/g, '');
 
@@ -223,19 +228,23 @@ const SimulateLoan = () => {
         </div>
       </form>
 
-      {error && (
-        <Modal show={showModal} onHide={handleCloseModal}>
+        {error && (
+      <Modal show={showModal} onHide={handleCloseModal}>
           <Modal.Header closeButton>
-            <Modal.Title>Error</Modal.Title>
+              <Modal.Title>Error</Modal.Title>
           </Modal.Header>
           <Modal.Body>
-            {error}
+              {error}
           </Modal.Body>
           <Modal.Footer>
-            <Button variant="secondary" onClick={handleCloseModal}>Cerrar</Button>
+              <Button variant="secondary" onClick={handleCloseModal}>Cerrar</Button>
+              {error === 'RUT inválido o usuario no registrado' && (
+                  <Button variant="primary" onClick={handleRegisterRedirect}>Registrarse</Button>
+              )}
           </Modal.Footer>
-        </Modal>
-      )}
+      </Modal>
+        )}
+
     </div>
   );
 };

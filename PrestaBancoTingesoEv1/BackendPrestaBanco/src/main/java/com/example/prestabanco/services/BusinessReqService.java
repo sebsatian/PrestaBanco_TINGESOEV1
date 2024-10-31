@@ -18,8 +18,12 @@ public class BusinessReqService {
     private SimulationRepository simulationRepository;
     @Autowired
     private ClientRepository clientRepository;
-    public BusinessReqRepository createBusinessReqRepository(SimulationEntity simulation, byte[] businessPlan,
-                                                             byte[] financialStatement, byte[] incomeProof, byte[] appraisalCertificate, BigDecimal monthlyIncome) {
+    public BusinessReqEntity createBusinessRequest(SimulationEntity simulation,
+                                                   byte[] businessPlan,
+                                                   byte[] financialStatement,
+                                                   byte[] incomeProof,
+                                                   byte[] appraisalCertificate,
+                                                   BigDecimal monthlyIncome) {
         int loanType = 3;
         BusinessReqEntity businessReq = new BusinessReqEntity();
         String rut = clientRepository.getClientRutById((long) simulation.getClientId());
@@ -34,9 +38,10 @@ public class BusinessReqService {
         businessReq.setLoanAmount(simulation.getLoanAmount());
         businessReq.setYears(simulation.getYears());
         businessReq.setCurrentStatus("En revisión inicial");
-        businessReq.setAnnualInterestRate(simulation.getAnnualInterestRate());
+        businessReq.setAnnualInterestRate(BigDecimal.valueOf(simulation.getAnnualInterestRate()));
         businessReq.setMonthlyPayment(simulation.getMonthlyPayment());
-        return (BusinessReqRepository) businessReqRepository.save(businessReq);
+        businessReq.setMonthlyIncome(monthlyIncome);
+        return businessReqRepository.save(businessReq);
 
     }
 }

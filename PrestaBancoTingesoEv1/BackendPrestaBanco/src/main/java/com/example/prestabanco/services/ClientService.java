@@ -14,24 +14,24 @@ public class ClientService {
     @Autowired
     ClientRepository clientRepository;
 
-    // Obtener todos los clientes
+    // Obtain all clients
     public ArrayList<ClientEntity> getAllClients() {
         return (ArrayList<ClientEntity>) clientRepository.findAll();
     }
 
-    // Obtener un cliente por ID con manejo de "no encontrado"
+    // Obtain a client by its ID
     public Optional<ClientEntity> getClientById(Long id) {
         return clientRepository.findById(id);
     }
 
     public ClientEntity registerClient(ClientEntity client) {
-        // Verificar si el RUT ya está registrado
-        Optional<ClientEntity> existingClient = clientRepository.findByRut(client.getRut());
+        // Verify that the client does not already exist
+        Optional<ClientEntity> existingClient = Optional.ofNullable(clientRepository.findClientByRut(client.getRut()));
         if (existingClient.isPresent()) {
             throw new RuntimeException("El RUT ya está registrado");
         }
 
-        // Guardar el nuevo cliente en la base de datos
+        // Save the client
         return clientRepository.save(client);
     }
 

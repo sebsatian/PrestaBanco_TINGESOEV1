@@ -96,7 +96,7 @@ public class SimulationService {
         return newSimulation;
     }
 
-    // Create a new simulation
+    // Update the simulation with the new values
     public SimulationEntity updateSimulation(Long simulationId, String rut, int propertyValue, Long loanType, int years, float percentage) {
         // Find the existing simulation by ID
         SimulationEntity existingSimulation = simulationRepository.findById(simulationId)
@@ -114,6 +114,7 @@ public class SimulationService {
         existingSimulation.setMonthlyPayment(updatedValues.getMonthlyPayment());
         existingSimulation.setPercentage(updatedValues.getPercentage());
         existingSimulation.setFinalAmount(updatedValues.getFinalAmount());
+        existingSimulation.setLoanType(loanType.intValue()); // Asegúrate de actualizar el loanType
 
         // Save the updated simulation to the database
         simulationRepository.save(existingSimulation);

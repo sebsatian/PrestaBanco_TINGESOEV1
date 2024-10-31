@@ -5,6 +5,8 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import jakarta.persistence.*;
+import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.type.SqlTypes;
 
 @EqualsAndHashCode(callSuper = true)
 @Data
@@ -14,15 +16,15 @@ import jakarta.persistence.*;
 @Table(name = "second_home_request")
 public class SecondHomeReqEntity extends RequestEntity {
 
-    @Lob
-    @Column(name = "first_home_deed", columnDefinition = "BYTEA")
+    @JdbcTypeCode(SqlTypes.BINARY)
+    @Column(name = "first_home_deed")
     private byte[] firstHomeDeed;
 
-    @Lob
-    @Column(name = "credit_history", columnDefinition = "BYTEA")
+    @JdbcTypeCode(SqlTypes.BINARY)
+    @Column(name = "credit_history")
     private byte[] creditHistory;
 
-    @Lob
-    @Column(name = "job_conctract", columnDefinition = "BYTEA")
+    @JdbcTypeCode(SqlTypes.BINARY)
+    @Column(name = "job_conctract")
     private byte[] jobConctract;
 }

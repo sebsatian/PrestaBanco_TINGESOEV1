@@ -60,14 +60,14 @@ const EditLoanTypes = () => {
         const requestPayload = {
           type: loanType.type,
           maximumTerm: loanType.maximumTerm,
-          maxFinance: parseFloat(loanType.maxFinance).toFixed(2), // Ensure maxFinance is sent as a double with 2 decimal places
+          maxFinance: parseFloat(loanType.maxFinance).toFixed(2), 
           minInterestRate: parseFloat(loanType.minInterestRate).toFixed(2),
           maxInterestRate: parseFloat(loanType.maxInterestRate).toFixed(2),
           annualInterestRate: parseFloat(loanType.annualInterestRate).toFixed(2),
         };
         await loanTypeService.updateLoanType(loanType.id, requestPayload);
       }
-      navigate('/loan-types/view'); // Redirige a la vista después de guardar cambios
+      navigate('/loan-types/view'); 
     } catch (err) {
       console.error('Error updating loan types:', err);
       setError('No se pudo actualizar los tipos de préstamo. Por favor, inténtelo de nuevo más tarde.');

@@ -161,12 +161,12 @@ public class SimulationController {
             SimulationEntity existingSimulation = simulationRepository.findById(simulationId)
                     .orElseThrow(() -> new IllegalArgumentException("Simulation not found with the provided ID"));
 
-            // Obtener el RUT del cliente asociado con la simulación existente
+            // Obtain the client's RUT using the simulation's client ID
             String rut = clientRepository.findById((long) existingSimulation.getClientId())
                     .orElseThrow(() -> new IllegalArgumentException("Client not found for the provided simulation"))
                     .getRut();
 
-            // Llamar al servicio para actualizar la simulación utilizando el RUT y la información actualizada
+            // Call the service to update the simulation
             SimulationEntity updatedSimulationEntity = simulationService.updateSimulation(
                     simulationId,
                     rut,

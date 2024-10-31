@@ -1,4 +1,3 @@
-// services/simulate.service.js
 import httpClient from '../http-common';
 
 const simulateLoan = (simulationData) => {

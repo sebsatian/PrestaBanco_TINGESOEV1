@@ -5,6 +5,8 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import jakarta.persistence.*;
+import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.type.SqlTypes;
 
 @EqualsAndHashCode(callSuper = true)
 @Data
@@ -14,12 +16,12 @@ import jakarta.persistence.*;
 @Table(name = "business_request")
 public class BusinessReqEntity extends RequestEntity {
 
-    @Lob
-    @Column(name = "finantial_statement", columnDefinition = "BYTEA")
+    @JdbcTypeCode(SqlTypes.BINARY)
+    @Column(name = "finantial_statement")
     private byte[] finantialStatement;
 
-    @Lob
-    @Column(name = "business_plan", columnDefinition = "BYTEA")
+    @JdbcTypeCode(SqlTypes.BINARY)
+    @Column(name = "business_plan")
     private byte[] businessPlan;
 
     public void setFinancialStatement(byte[] financialStatement) {

@@ -1,0 +1,62 @@
+body, html {
+    overflow-x: hidden;
+  }
+.evaluate-request-container {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    min-height: 100vh; 
+    width: 100vw;
+    position: relative;
+    padding-top: 20px;
+    background-color: white; 
+  }
+  
+  .evaluate-request-details {
+    flex-direction: column;
+    height: auto;
+    width: 40vw;
+    background-color: white;
+    padding: 20px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+    transition: transform 0.5s ease-in-out;
+    transform: translateX(0);
+    position: relative;
+    z-index: 1;
+  }
+.pdf-preview {
+    width: 50vw;
+    height: 95vh;
+    position: absolute;
+    right: -60vw; 
+    top: 0;
+    background-color: #bebebe;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+    transition: transform 0.5s ease-in-out;
+    opacity: 1;
+    visibility: visible;
+}
+
+.split-view .pdf-preview {
+  transform: translateX(-60vw); 
+}
+
+.split-view .evaluate-request-details {
+  transform: translateX(-20vw); 
+}
+
+.eval-document-button {
+  padding: 6px 9px;
+  font-size: 14px;
+  border: none;
+  border-radius: 5px;
+  background-color: #007BFF;
+  color: white;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  margin-left: 15px;
+}
+
+.eval-document-button:hover {
+  background-color: #0056b3;
+}

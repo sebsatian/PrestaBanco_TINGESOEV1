@@ -8,7 +8,7 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface LoanTypeRepository extends JpaRepository<LoanTypeEntity, Long> {
-    LoanTypeEntity findById(long id);
+    LoanTypeEntity findTypeById(long id);
     @Query("SELECT l.annualInterestRate FROM LoanTypeEntity l WHERE l.id = :loanTypeId")
     float getInterestRateById(@Param("loanTypeId") Long loanTypeId);
 
