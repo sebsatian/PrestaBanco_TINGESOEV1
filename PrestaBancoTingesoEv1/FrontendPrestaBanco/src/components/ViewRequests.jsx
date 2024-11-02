@@ -78,16 +78,27 @@ const ViewRequests = () => {
                 <td className="text-center">{loanTypes[request.loanType] || 'Cargando...'}</td>
                 <td className="text-center">{request.currentStatus}</td>
                 <td className="text-center">
-                <button
+                  <button
                     className="btn btn-primary"
                     onClick={() => {
-                      if (location.state?.from === 'ejecutivo' && request.currentStatus != 'En evaluación') {
-                        navigate(`/evaluate-request/${request.id}`, { state: { key: request.id } });
-                      } 
-                      else if (location.state?.from === 'ejecutivo' && request.currentStatus == 'En evaluación') {
+                      console.log('Received state:', location.state);
+                      if (location.state?.from === 'ejecutivo') {
+                        console.log('Navigating to evaluate-request with state:', { key: request.id });
+                        if (request.currentStatus === 'Aprobada' || request.currentStatus === 'Pre-Aprobada') {
+                          navigate(`/request-details/${request.id}`, { state: { from: 'ejecutivo' } });
+                        } else if (request.currentStatus !== 'En evaluación') {
+                          navigate(`/evaluate-request/${request.id}`, { state: { key: request.id } });
+                        } else {
                           navigate(`/evaluation/${request.id}`);
-                      }else {
-                        navigate(`/request-details/${request.id}`, { state: { key: request.id } });
+                        }
+                      } else {
+                        if (['En Aprobación Final', 'Pre-Aprobada'].includes(request.currentStatus) && location.state?.from === 'ejecutivo') {
+                          console.log('Navigating to request-details with state:', { from: 'ejecutivo' });
+                          navigate(`/request-details/${request.id}`, { state: { from: 'ejecutivo' } });
+                        } else {
+                          console.log('Navigating to request-details with state:', { from: 'cliente' });
+                          navigate(`/request-details/${request.id}`, { state: { from: 'cliente' } });
+                        }
                       }
                     }}
                   >

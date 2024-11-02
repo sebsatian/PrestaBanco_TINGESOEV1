@@ -14,6 +14,7 @@ import EvaluateRequest from './components/EvaluateRequest';
 import EvaluationDetails from './components/EvaluationDetails';
 import SavingCapacity from './components/SavingCapacity';
 import Layout from './components/Layout'; 
+import TotalCosts from './components/TotalCosts'; 
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './App.css';
 
@@ -35,6 +36,7 @@ function App() {
         <Route path="/evaluate-request/:id" element={<Layout content={<EvaluateRequest />} />} />
         <Route path="/evaluation/:id" element={<Layout content={<EvaluationDetails />} />} />
         <Route path="/saving-capacity/:id" element={<Layout content={<SavingCapacity/>} />} />
+        <Route path="/total-costs/:id" element={<Layout content={<TotalCosts />} />} /> 
         
       </Routes>
     </Router>

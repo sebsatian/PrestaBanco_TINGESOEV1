@@ -1,13 +1,17 @@
 import { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate, useLocation } from 'react-router-dom';
 import requestService from '../services/request.service.js';
+import loanTypeService from '../services/loanType.service.js';
 import { Modal, Button } from 'react-bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import '../styles/RequestDetails.css';
 
 const RequestDetails = () => {
   const { id } = useParams();
+  const navigate = useNavigate();
+  const location = useLocation();
   const [request, setRequest] = useState(null);
+  const [loanType, setLoanType] = useState(null);
   const [error, setError] = useState('');
   const [pdfUrl, setPdfUrl] = useState(null);
   const [showViewer, setShowViewer] = useState(false);
@@ -16,11 +20,14 @@ const RequestDetails = () => {
   const [modalDetails, setModalDetails] = useState('');
 
   useEffect(() => {
-    if (id !== null && request === null) {
+    console.log('Location state:', location.state);
+    if (id && id !== 'null' && request === null) {
       const fetchRequest = async () => {
         try {
           const response = await requestService.getRequestById(id);
           setRequest(response.data);
+          const loanTypeResponse = await loanTypeService.getLoanTypeById(response.data.loanType);
+          setLoanType(loanTypeResponse.data);
         } catch (error) {
           console.error('Error al obtener la solicitud:', error);
           setError('No se pudo obtener la solicitud. Por favor, vuelva a intentarlo.');
@@ -29,7 +36,7 @@ const RequestDetails = () => {
       
       fetchRequest();
     }
-  }, [id]);
+  }, [id, location.state, request]);
 
   const showDocument = (base64Document, buttonId) => {
     if (activeButton === buttonId && showViewer) {
@@ -59,44 +66,79 @@ const RequestDetails = () => {
     setShowModal(true);
   };
 
+  const handleCancelRequest = async () => {
+    try {
+      console.log('Cancelling request:', id);
+      await requestService.updateRequestStatus(id, 'Cancelada por el Cliente');
+      alert('La solicitud ha sido cancelada.');
+      navigate('/'); // Redirige a la página principal
+    } catch (error) {
+      console.error('Error al cancelar la solicitud:', error);
+      alert('Error al cancelar la solicitud.');
+    }
+  };
+
+  const handleViewDetails = () => {
+    if (request.currentStatus === 'Pre-Aprobada') {
+      navigate(`/total-costs/${id}`, { state: 'detalles' });
+    } else if (request.currentStatus === 'En Aprobación Final') {
+      navigate(`/total-costs/${id}`, { state: 'aprobacionFinal' });
+    }
+  };
+
+  const formatAmount = (amount) => {
+    return `$${amount.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, '.').replace(/(\d+)\.(\d{2})$/, '$1,$2')}`;
+  };
+
+  const formatPercentage = (rate) => {
+    return `${rate.toFixed(2).replace('.', ',')}%`;
+  };
+
   if (error) {
     return <div className="alert alert-danger mt-4">{error}</div>;
   }
 
-  if (!request) {
+  if (!request || !loanType) {
     return <div className="container mt-4">Cargando solicitud...</div>;
   }
 
   return (
     <div className={`request-container ${showViewer ? 'split-view' : ''}`}>
       <div className="request-details" style={{ width: showViewer ? '40%' : '40%' }}>
+        <div className="d-flex justify-content-end">
+          <Button variant="danger" onClick={handleCancelRequest} className="mb-3">
+            Cancelar Solicitud
+          </Button>
+        </div>
         <h2>Detalles de la Solicitud</h2>
         <ul className="list-group">
-          <li className="list-group-item"><strong>ID:</strong> {request.id}</li>
           <li className="list-group-item"><strong>Fecha de Creación:</strong> {new Date(request.creationDate).toLocaleString()}</li>
           <li className="list-group-item"><strong>RUT del Cliente:</strong> {request.clientRut}</li>
-          <li className="list-group-item"><strong>Tipo de Préstamo:</strong> {request.loanType}</li>
+          <li className="list-group-item"><strong>Tipo de Préstamo:</strong> {loanType.type}</li>
           <li
             className="list-group-item"
             style={{
-              backgroundColor: request.currentStatus === 'Rechazada' || request.currentStatus === 'Pendiente de Documentación' ? '#f8d7da' : 'inherit'
+              backgroundColor: ['Pre-Aprobada', 'En Aprobación Final'].includes(request.currentStatus) ? '#d4edda' : 
+                ['Rechazada', 'Pendiente de Documentación', 'Cancelada por el Cliente'].includes(request.currentStatus) ? '#f8d7da' : 'inherit'
             }}
           >
-            <strong>Estado:</strong> 
-            <span style={{ color: 'black', fontWeight: 'bold', fontSize: '16px', textDecoration: 'underline' }}>
-              {request.currentStatus}
-            </span>
-            {(request.currentStatus === 'Rechazada' || request.currentStatus === 'Pendiente de Documentación') && (
+            <strong>Estado:</strong> {request.currentStatus}
+            {['Rechazada', 'Pendiente de Documentación'].includes(request.currentStatus) && (
+              <Button variant="primary" onClick={() => handleShowModal(request.details)}>
+                Ver detalles
+              </Button>
+            )}
+            {['Pre-Aprobada', 'En Aprobación Final'].includes(request.currentStatus) && (
               <Button variant="primary" onClick={() => handleShowModal(request.details)}>
                 Ver detalles
               </Button>
             )}
           </li>
-          <li className="list-group-item"><strong>Ingreso Mensual:</strong> {request.monthlyIncome}</li>
-          <li className="list-group-item"><strong>Monto del Préstamo:</strong> {request.loanAmount}</li>
+          <li className="list-group-item"><strong>Ingreso Mensual:</strong> {formatAmount(request.monthlyIncome)}</li>
+          <li className="list-group-item"><strong>Monto del Préstamo:</strong> {formatAmount(request.loanAmount)}</li>
           <li className="list-group-item"><strong>Años:</strong> {request.years}</li>
-          <li className="list-group-item"><strong>Pago Mensual:</strong> {request.monthlyPayment}</li>
-          <li className="list-group-item"><strong>Tasa de Interés Anual:</strong> {request.annualInterestRate}</li>
+          <li className="list-group-item"><strong>Pago Mensual:</strong> {formatAmount(request.monthlyPayment)}</li>
+          <li className="list-group-item"><strong>Tasa de Interés Anual:</strong> {formatPercentage(request.annualInterestRate)}</li>
           <li className="list-group-item">
             <strong>Certificado de Avalúo:</strong>
             <div className="button-container">
@@ -250,6 +292,11 @@ const RequestDetails = () => {
           <Button variant="secondary" onClick={() => setShowModal(false)}>
             Cerrar
           </Button>
+          {['Pre-Aprobada', 'En Aprobación Final'].includes(request.currentStatus) && (
+            <Button variant="primary" onClick={handleViewDetails}>
+              Ver costos totales
+            </Button>
+          )}
         </Modal.Footer>
       </Modal>
     </div>

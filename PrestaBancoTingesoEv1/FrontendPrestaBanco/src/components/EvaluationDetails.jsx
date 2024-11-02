@@ -44,20 +44,26 @@ const EvaluationDetails = () => {
     setShowModal(true);
   };
 
-  const handleNavigate = (path) => {
-    navigate(path);
-  };
-
   const handleRejectDetails = async () => {
     try {
       await requestService.updateRequestDetails(id, rejectDetails);
       await requestService.updateRequestStatus(id, 'Rechazada');
       setShowRejectModal(false);
       alert('El estado se actualizó correctamente.');
-      navigate('/'); // Redirige a la página principal
+      navigate('/'); 
     } catch (error) {
       console.error('Error al actualizar los detalles de la solicitud:', error);
       alert('Error al actualizar los detalles de la solicitud.');
+    }
+  };
+
+  const handleCalculateTotalCosts = async () => {
+    try {
+      await requestService.postTotalCosts(id);
+      navigate(`/total-costs/${id}`, { state: 'costos' });
+    } catch (error) {
+      console.error('Error al calcular los costos totales:', error);
+      setError('No se pudo calcular los costos totales. Por favor, vuelva a intentarlo.');
     }
   };
 
@@ -113,9 +119,16 @@ const EvaluationDetails = () => {
         </Button>
         <Button
           variant="primary"
-          onClick={() => handleNavigate(`/saving-capacity/${id}`)}
+          onClick={() => navigate(`/saving-capacity/${id}`)}
         >
           Capacidad de ahorro
+        </Button>
+        <Button
+          variant="success"
+          onClick={handleCalculateTotalCosts}
+          style={{ marginLeft: '10px' }}
+        >
+          Calcular Costos Totales
         </Button>
       </div>
       <h6 style={{ borderTop: '2px  #dee2e6', paddingTop: '20px' }}>

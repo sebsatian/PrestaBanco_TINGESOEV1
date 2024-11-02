@@ -59,6 +59,16 @@ const SavingCapacityDetails = () => {
     }
   };
 
+  const handleCalculateTotalCosts = async () => {
+    try {
+      await requestService.postTotalCosts(id);
+      navigate(`/total-costs/${id}`);
+    } catch (error) {
+      console.error('Error al calcular los costos totales:', error);
+      setError('No se pudo calcular los costos totales. Por favor, vuelva a intentarlo.');
+    }
+  };
+
   if (error) {
     return <div className="alert alert-danger mt-4">{error}</div>;
   }
@@ -114,6 +124,13 @@ const SavingCapacityDetails = () => {
           onClick={() => navigate(`/evaluation/${id}`)}
         >
           Resultados de evaluación
+        </Button>
+        <Button
+          variant="success"
+          onClick={handleCalculateTotalCosts}
+          style={{ marginLeft: '10px' }}
+        >
+          Calcular Costos Totales
         </Button>
       </div>
       <h6 style={{ borderTop: '2px  #dee2e6', paddingTop: '20px' }}>

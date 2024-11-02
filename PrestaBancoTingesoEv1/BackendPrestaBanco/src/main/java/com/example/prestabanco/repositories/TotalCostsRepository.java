@@ -7,4 +7,6 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface TotalCostsRepository extends JpaRepository<TotalCostsEntity, Long> {
 
+    TotalCostsEntity getTotalCostsByRequestId(Long requestId);
+
 }

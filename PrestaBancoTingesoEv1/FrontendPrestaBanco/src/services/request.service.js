@@ -20,7 +20,9 @@ const updateRequestStatus = (id, statusUpdate) => {
   return http.post(`/requests/${id}/status`, { statusUpdate });
 };
 
-
+const updateRequestDetails = (id, details) => {
+  return http.post(`/requests/${id}/details`, { detailsUpdate: details });
+};
 
 const createRemodelingRequest = (formData) => {
   return http.post('/remodelingreq/create', formData, {
@@ -38,9 +40,7 @@ const createBusinessRequest = (formData) => {
   });
 };
 
-const updateRequestDetails = (id, details) => {
-  return http.post(`/requests/${id}/details`, { detailsUpdate: details });
-};
+
 
 const getSimulationById = (simulationId) => {
   return http.get(`/simulate/${simulationId}`);
@@ -66,7 +66,13 @@ const getRequestsByRut = (rut) => {
   return http.get(`/requests/rut/${rut}`);
 };
 
+const getTotalCosts = (requestId) => {
+  return http.get(`/total-costs/${requestId}`);
+};
 
+const postTotalCosts = (requestId) => {
+  return http.post(`/total-costs/create/${requestId}`);
+};
 
 export default {
   getSimulationById,
@@ -79,5 +85,7 @@ export default {
   getAllRequests,
   getRequestById,
   getRequestsByRut, 
-  updateRequestDetails
+  updateRequestDetails,
+  getTotalCosts,
+  postTotalCosts,
 };
