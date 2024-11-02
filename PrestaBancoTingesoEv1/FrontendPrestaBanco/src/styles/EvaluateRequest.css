@@ -1,7 +1,7 @@
 body, html {
     overflow-x: hidden;
   }
-.evaluate-request-container {
+  .evaluate-request-container {
     display: flex;
     justify-content: center;
     align-items: flex-start;
@@ -9,7 +9,7 @@ body, html {
     width: 100vw;
     position: relative;
     padding-top: 20px;
-    background-color: white; 
+    background-color: #d3e6ff; 
   }
   
   .evaluate-request-details {
@@ -23,27 +23,29 @@ body, html {
     transform: translateX(0);
     position: relative;
     z-index: 1;
+    border-radius: 15px;
   }
-.pdf-preview {
+  .pdf-preview {
+    display: flex;
+    justify-content: center;
+    align-items: center;
     width: 50vw;
-    height: 95vh;
-    position: absolute;
-    right: -60vw; 
+    height: 100vh;
+    position: fixed;
+    right: -50vw; 
     top: 0;
-    background-color: #bebebe;
-    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+    background-color: #d3e6ff;
     transition: transform 0.5s ease-in-out;
-    opacity: 1;
-    visibility: visible;
-}
-
-.split-view .pdf-preview {
-  transform: translateX(-60vw); 
-}
-
-.split-view .evaluate-request-details {
-  transform: translateX(-20vw); 
-}
+  }
+  
+  .split-view .pdf-preview {
+    transform: translateX(-50vw); 
+  }
+  
+  .split-view .evaluate-request-details {
+    transform: translateX(-20vw); 
+  }
+  
 
 .eval-document-button {
   padding: 6px 9px;
@@ -59,4 +61,9 @@ body, html {
 
 .eval-document-button:hover {
   background-color: #0056b3;
+}
+
+.button-container-right {
+  display: flex;
+  justify-content: flex-end;
 }

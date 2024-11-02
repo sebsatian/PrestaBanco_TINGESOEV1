@@ -21,6 +21,6 @@ public class FirstHomeReqEntity extends RequestEntity {
     private byte[] creditHistory;
 
     @JdbcTypeCode(SqlTypes.BINARY)
-    @Column(name = "job_conctract")
-    private byte[] jobConctract;
+    @Column(name = "job_contract")
+    private byte[] jobContract;
 }

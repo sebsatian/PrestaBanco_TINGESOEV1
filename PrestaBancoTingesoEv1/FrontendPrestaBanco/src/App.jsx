@@ -11,6 +11,8 @@ import RequestDetails from './components/RequestDetails';
 import MainPage from './components/MainPage';
 import CheckRequestStatus from './components/CheckRequestStatus';
 import EvaluateRequest from './components/EvaluateRequest';
+import EvaluationDetails from './components/EvaluationDetails';
+import SavingCapacity from './components/SavingCapacity';
 import Layout from './components/Layout'; 
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './App.css';
@@ -31,6 +33,9 @@ function App() {
         <Route path="/request-details/:id" element={<Layout content={<RequestDetails />} />} />
         <Route path="/check-request-status" element={<Layout content={<CheckRequestStatus />} />} />
         <Route path="/evaluate-request/:id" element={<Layout content={<EvaluateRequest />} />} />
+        <Route path="/evaluation/:id" element={<Layout content={<EvaluationDetails />} />} />
+        <Route path="/saving-capacity/:id" element={<Layout content={<SavingCapacity/>} />} />
+        
       </Routes>
     </Router>
   );

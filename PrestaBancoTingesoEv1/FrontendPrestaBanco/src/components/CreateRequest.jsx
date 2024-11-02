@@ -68,6 +68,7 @@ const CreateRequest = () => {
       // Add the documents
       formData.append('incomeProof', documents.incomeProof);
       formData.append('appraisalCertificate', documents.appraisalCertificate);
+      formData.append('savingsAccount', documents.savingsAccount);
 
       // Add the monthly income
       const monthlyIncomeValue = parseFloat(documents.monthlyIncome.replace(/[^0-9]/g, ''));
@@ -151,6 +152,7 @@ const CreateRequest = () => {
             required
           />
         </div>
+        
         <div className="form-group mt-3">
           <label htmlFor="monthlyIncome">Ingreso Mensual</label>
           <input
@@ -170,6 +172,17 @@ const CreateRequest = () => {
             className="form-control"
             id="incomeProof"
             name="incomeProof"
+            onChange={handleDocumentChange}
+            required
+          />
+        </div>
+        <div className="form-group mt-3">
+          <label htmlFor="savingsAccount">Cuenta de Ahorro</label>
+          <input
+            type="file"
+            className="form-control"
+            id="savingsAccount"
+            name="savingsAccount"
             onChange={handleDocumentChange}
             required
           />

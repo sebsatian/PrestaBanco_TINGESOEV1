@@ -1,7 +1,10 @@
 package com.example.prestabanco.controllers;
 
+import com.example.prestabanco.entities.EvaluationEntity;
 import com.example.prestabanco.entities.RequestEntity;
+import com.example.prestabanco.repositories.EvaluationRepository;
 import com.example.prestabanco.services.EvaluationService;
+import com.example.prestabanco.services.SavingCapacityService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -14,11 +17,15 @@ import java.time.LocalDate;
 public class EvaluationController {
     @Autowired
     private EvaluationService evaluationService;
+    @Autowired
+    private EvaluationRepository evaluationRepository;
+    @Autowired
+    private SavingCapacityService savingCapacityService;
 
     @PostMapping("/evaluate")
-    public String evaluateRequest(
+    public void evaluateRequest(
             @RequestBody RequestEntity request,
-            @RequestParam LocalDate creationSavingAccountDate,
+            @RequestParam String creationSavingAccountDate,
             @RequestParam boolean jobStatus,
             @RequestParam BigDecimal balance,
             @RequestParam BigDecimal sumAllDeposits,
@@ -33,7 +40,7 @@ public class EvaluationController {
             @RequestParam boolean creditHistory,
             @RequestParam BigDecimal sumAllDebts) {
         try {
-            evaluationService.createEvaluation(request,
+            EvaluationEntity evaluation =  evaluationService.createEvaluation(request,
                     creationSavingAccountDate,
                     jobStatus,
                     balance,
@@ -48,9 +55,19 @@ public class EvaluationController {
                     numDepositsSecond4Months,
                     creditHistory,
                     sumAllDebts);
-            return "Request evaluated successfully";
+
+            evaluationRepository.save(evaluation);
+            // Calculate the saving capacity
+            savingCapacityService.evaluateSavingCapacity(evaluation);
         } catch (Exception e) {
-            return "An unexpected error occurred";
+            e.printStackTrace();
+            throw new RuntimeException("Error al procesar la solicitud");
         }
+    }
+
+    // Get the evaluation by request id
+    @GetMapping("/{id}")
+    public EvaluationEntity getEvaluationByRequestId(@PathVariable Long id) {
+        return evaluationRepository.findByRequestId(id).orElse(null);
     }
 }

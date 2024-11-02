@@ -22,6 +22,7 @@ public class FirstHomeReqController {
             @RequestPart("appraisalCertificate") MultipartFile appraisalCertificate,
             @RequestPart("incomeProof") MultipartFile incomeProof,
             @RequestPart("jobContract") MultipartFile jobContract,
+            @RequestPart("savingsAccount") MultipartFile savingsAccount,
             @RequestPart("creditHistory") MultipartFile creditHistory,
             @RequestParam("monthlyIncome") BigDecimal monthlyIncome) {
         try {
@@ -30,12 +31,14 @@ public class FirstHomeReqController {
             byte[] incomeProofBytes = incomeProof.getBytes();
             byte[] jobContractBytes = jobContract.getBytes();
             byte[] creditHistoryBytes = creditHistory.getBytes();
+            byte[] savingsAccountBytes = savingsAccount.getBytes();
 
             // create the request
             return firstHomeReqService.createFirstHomeRequest(
                     simulation,
                     appraisalCertificateBytes,
                     incomeProofBytes,
+                    savingsAccountBytes,
                     jobContractBytes,
                     creditHistoryBytes,
                     monthlyIncome);

@@ -7,4 +7,5 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface SavingCapacityRepository extends JpaRepository<SavingCapacityEntity, Long> {
 
+    SavingCapacityEntity findByRequestId(int requestId);
 }

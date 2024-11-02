@@ -21,6 +21,7 @@ public class RemodelingReqController {
             @RequestPart("simulation") SimulationEntity simulation,
             @RequestPart("incomeProof") MultipartFile incomeProof,
             @RequestPart("appraisalCertificate") MultipartFile appraisalCertificate,
+            @RequestPart("savingsAccount") MultipartFile savingsAccount,
             @RequestPart("remodelingBudget") MultipartFile remodelingBudget,
             @RequestParam("monthlyIncome") BigDecimal monthlyIncome) {
         try {
@@ -28,12 +29,14 @@ public class RemodelingReqController {
             byte[] incomeProofBytes = incomeProof.getBytes();
             byte[] appraisalCertificateBytes = appraisalCertificate.getBytes();
             byte[] remodelingBudgetBytes = remodelingBudget.getBytes();
+            byte[] savingsAccountBytes = savingsAccount.getBytes();
 
 
             return remodelingReqService.createRemodelingReq(
                     simulation,
                     incomeProofBytes,
                     appraisalCertificateBytes,
+                    savingsAccountBytes,
                     remodelingBudgetBytes,
                     monthlyIncome);
         } catch (Exception e) {

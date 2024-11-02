@@ -48,7 +48,7 @@ const ViewRequests = () => {
     };
 
     fetchRequests();
-  }, [location.state]); // Actualiza si cambia el estado de la ubicación
+  }, [location.state]); 
 
   if (error) {
     return <div className="alert alert-danger mt-4">{error}</div>;
@@ -78,13 +78,16 @@ const ViewRequests = () => {
                 <td className="text-center">{loanTypes[request.loanType] || 'Cargando...'}</td>
                 <td className="text-center">{request.currentStatus}</td>
                 <td className="text-center">
-                  <button
+                <button
                     className="btn btn-primary"
                     onClick={() => {
-                      if (location.state?.from === 'ejecutivo') {
-                        navigate(`/evaluate-request/${request.id}`);
-                      } else {
-                        navigate(`/request-details/${request.id}`);
+                      if (location.state?.from === 'ejecutivo' && request.currentStatus != 'En evaluación') {
+                        navigate(`/evaluate-request/${request.id}`, { state: { key: request.id } });
+                      } 
+                      else if (location.state?.from === 'ejecutivo' && request.currentStatus == 'En evaluación') {
+                          navigate(`/evaluation/${request.id}`);
+                      }else {
+                        navigate(`/request-details/${request.id}`, { state: { key: request.id } });
                       }
                     }}
                   >

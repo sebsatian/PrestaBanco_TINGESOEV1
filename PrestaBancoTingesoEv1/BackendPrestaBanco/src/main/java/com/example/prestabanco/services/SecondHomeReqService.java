@@ -19,6 +19,7 @@ public class SecondHomeReqService {
     public SecondHomeReqEntity createSecondHomeRequest(SimulationEntity simulation,
                                                        byte[] appraisalCertificate,
                                                        byte[] incomeProof,
+                                                       byte[] savingsAccount,
                                                        byte[] jobContract,
                                                        byte[] creditHistory,
                                                        byte[] firstHomeDeed,
@@ -30,7 +31,8 @@ public class SecondHomeReqService {
         secondHomeRequest.setClientRut(rut);
         secondHomeRequest.setLoanType(loanType);
         secondHomeRequest.setCreditHistory(creditHistory);
-        secondHomeRequest.setJobConctract(jobContract);
+        secondHomeRequest.setSavingsAccount(savingsAccount);
+        secondHomeRequest.setJobContract(jobContract);
         secondHomeRequest.setIncomeProof(incomeProof);
         secondHomeRequest.setAppraisalCertificate(appraisalCertificate);
         secondHomeRequest.setCreationDate(LocalDateTime.now());

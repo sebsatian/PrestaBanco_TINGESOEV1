@@ -22,6 +22,7 @@ public class BusinessReqController {
             @RequestPart("businessPlan") MultipartFile businessPlan,
             @RequestPart("financialStatement") MultipartFile financialStatement,
             @RequestPart("incomeProof") MultipartFile incomeProof,
+            @RequestPart("savingsAccount") MultipartFile savingsAccount,
             @RequestPart("appraisalCertificate") MultipartFile appraisalCertificate,
             @RequestParam("monthlyIncome") BigDecimal monthlyIncome) {
         try {
@@ -30,6 +31,7 @@ public class BusinessReqController {
             byte[] financialStatementBytes = financialStatement.getBytes();
             byte[] incomeProofBytes = incomeProof.getBytes();
             byte[] appraisalCertificateBytes = appraisalCertificate.getBytes();
+            byte[] savingsAccountBytes = savingsAccount.getBytes();
 
             // Imprimir información para depuración
             System.out.println("Business Plan Size: " + businessPlanBytes.length);
@@ -45,6 +47,7 @@ public class BusinessReqController {
                     financialStatementBytes,
                     incomeProofBytes,
                     appraisalCertificateBytes,
+                    savingsAccountBytes,
                     monthlyIncome);
         } catch (Exception e) {
             e.printStackTrace();

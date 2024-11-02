@@ -16,8 +16,12 @@ public class RemodelingReqService {
     @Autowired
     private RemodelingReqRepository remodelingReqRepository;
 
-    public RemodelingReqEntity createRemodelingReq(SimulationEntity simulation, byte[] incomeProof,
-                                                   byte[] appraisalCertificate, byte[] remodelingBudget, BigDecimal monthlyIncome) {
+    public RemodelingReqEntity createRemodelingReq(SimulationEntity simulation,
+                                                   byte[] incomeProof,
+                                                   byte[] appraisalCertificate,
+                                                   byte[] savingsAccount,
+                                                   byte[] remodelingBudget,
+                                                   BigDecimal monthlyIncome) {
         RemodelingReqEntity remodelingReq = new RemodelingReqEntity();
         int clientId = simulation.getClientId();
         Long id = (long) clientId;
@@ -25,6 +29,7 @@ public class RemodelingReqService {
         remodelingReq.setClientRut(rut);
         remodelingReq.setLoanType(4);
         remodelingReq.setIncomeProof(incomeProof);
+        remodelingReq.setSavingsAccount(savingsAccount);
         remodelingReq.setAppraisalCertificate(appraisalCertificate);
         remodelingReq.setRemodelingBudget(remodelingBudget);
         remodelingReq.setYears(simulation.getYears());

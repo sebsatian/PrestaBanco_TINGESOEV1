@@ -17,14 +17,14 @@ import org.hibernate.type.SqlTypes;
 public class BusinessReqEntity extends RequestEntity {
 
     @JdbcTypeCode(SqlTypes.BINARY)
-    @Column(name = "finantial_statement")
-    private byte[] finantialStatement;
+    @Column(name = "financial_statement")
+    private byte[] financialStatement;
 
     @JdbcTypeCode(SqlTypes.BINARY)
     @Column(name = "business_plan")
     private byte[] businessPlan;
 
     public void setFinancialStatement(byte[] financialStatement) {
-        this.finantialStatement = financialStatement;
+        this.financialStatement = financialStatement;
     }
 }

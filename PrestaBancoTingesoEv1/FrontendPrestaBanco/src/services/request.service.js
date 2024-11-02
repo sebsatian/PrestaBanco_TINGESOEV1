@@ -16,6 +16,12 @@ const createSecondHomeRequest = (formData) => {
   });
 };
 
+const updateRequestStatus = (id, statusUpdate) => {
+  return http.post(`/requests/${id}/status`, { statusUpdate });
+};
+
+
+
 const createRemodelingRequest = (formData) => {
   return http.post('/remodelingreq/create', formData, {
     headers: {
@@ -32,8 +38,8 @@ const createBusinessRequest = (formData) => {
   });
 };
 
-const evaluateRequest = (formData) => {
-  return http.post('/evaluation/evaluate', formData);
+const updateRequestDetails = (id, details) => {
+  return http.post(`/requests/${id}/details`, { detailsUpdate: details });
 };
 
 const getSimulationById = (simulationId) => {
@@ -60,9 +66,6 @@ const getRequestsByRut = (rut) => {
   return http.get(`/requests/rut/${rut}`);
 };
 
-const getAppraisalCertificate = (id) => {
-  return http.get(`/requests/${id}/appraisalCertificate`, { responseType: 'arraybuffer' });
-};
 
 
 export default {
@@ -70,11 +73,11 @@ export default {
   createFirstHomeRequest,
   createSecondHomeRequest,
   createRemodelingRequest,
-  getAppraisalCertificate,
+  updateRequestStatus,
   createBusinessRequest,
-  evaluateRequest, 
   getLoanTypeById,
   getAllRequests,
   getRequestById,
   getRequestsByRut, 
+  updateRequestDetails
 };

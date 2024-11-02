@@ -20,6 +20,7 @@ public class FirstHomeReqService {
     public FirstHomeReqEntity createFirstHomeRequest(SimulationEntity simulation,
                                                      byte[] appraisalCertificate,
                                                      byte[] incomeProof,
+                                                     byte[] savingsAccountBytes,
                                                      byte[] jobContract,
                                                      byte[] creditHistory,
                                                      BigDecimal monthlyIncome) {
@@ -29,9 +30,10 @@ public class FirstHomeReqService {
         firstHomeRequest.setClientRut(rut);
         firstHomeRequest.setLoanType(loanType);
         firstHomeRequest.setCreditHistory(creditHistory);
-        firstHomeRequest.setJobConctract(jobContract);
+        firstHomeRequest.setJobContract(jobContract);
         firstHomeRequest.setIncomeProof(incomeProof);
         firstHomeRequest.setAppraisalCertificate(appraisalCertificate);
+        firstHomeRequest.setSavingsAccount(savingsAccountBytes);
         firstHomeRequest.setCreationDate(java.time.LocalDateTime.now());
         firstHomeRequest.setLoanAmount(simulation.getLoanAmount());
         firstHomeRequest.setYears(simulation.getYears());

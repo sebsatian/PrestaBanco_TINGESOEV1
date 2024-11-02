@@ -21,6 +21,7 @@ public class SecondHomeReqController {
             @RequestPart("simulation") SimulationEntity simulation,
             @RequestPart("appraisalCertificate") MultipartFile appraisalCertificate,
             @RequestPart("incomeProof") MultipartFile incomeProof,
+            @RequestPart("savingsAccount") MultipartFile savingsAccount,
             @RequestPart("jobContract") MultipartFile jobContract,
             @RequestPart("creditHistory") MultipartFile creditHistory,
             @RequestPart("firstHomeDeed") MultipartFile firstHomeDeed,
@@ -29,6 +30,7 @@ public class SecondHomeReqController {
             // Obtener los bytes de los archivos
             byte[] appraisalCertificateBytes = appraisalCertificate.getBytes();
             byte[] incomeProofBytes = incomeProof.getBytes();
+            byte[] savingsAccountBytes = savingsAccount.getBytes();
             byte[] jobContractBytes = jobContract.getBytes();
             byte[] creditHistoryBytes = creditHistory.getBytes();
             byte[] firstHomeDeedBytes = firstHomeDeed.getBytes();
@@ -46,6 +48,7 @@ public class SecondHomeReqController {
                     simulation,
                     appraisalCertificateBytes,
                     incomeProofBytes,
+                    savingsAccountBytes,
                     jobContractBytes,
                     creditHistoryBytes,
                     firstHomeDeedBytes,

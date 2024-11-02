@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import requestService from '../services/request.service.js';
+import { Modal, Button } from 'react-bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import '../styles/RequestDetails.css';
 
@@ -11,16 +12,23 @@ const RequestDetails = () => {
   const [pdfUrl, setPdfUrl] = useState(null);
   const [showViewer, setShowViewer] = useState(false);
   const [activeButton, setActiveButton] = useState(null);
+  const [showModal, setShowModal] = useState(false);
+  const [modalDetails, setModalDetails] = useState('');
 
   useEffect(() => {
-    requestService.getRequestById(id)
-      .then((response) => {
-        setRequest(response.data);
-      })
-      .catch((error) => {
-        console.error('Error al obtener la solicitud:', error);
-        setError('No se pudo obtener la solicitud. Por favor, vuelva a intentarlo.');
-      });
+    if (id !== null && request === null) {
+      const fetchRequest = async () => {
+        try {
+          const response = await requestService.getRequestById(id);
+          setRequest(response.data);
+        } catch (error) {
+          console.error('Error al obtener la solicitud:', error);
+          setError('No se pudo obtener la solicitud. Por favor, vuelva a intentarlo.');
+        }
+      };
+      
+      fetchRequest();
+    }
   }, [id]);
 
   const showDocument = (base64Document, buttonId) => {
@@ -36,14 +44,19 @@ const RequestDetails = () => {
       const blob = new Blob([byteArray], { type: 'application/pdf' });
       const url = URL.createObjectURL(blob);
       setPdfUrl(url);
-      setShowViewer(true); // Activa split-view para el deslizamiento
+      setShowViewer(true);
       setActiveButton(buttonId);
     }
   };
 
   const closeDocument = () => {
-    setShowViewer(false); // Quita split-view para devolver el visor fuera de la vista
+    setShowViewer(false);
     setActiveButton(null);
+  };
+
+  const handleShowModal = (details) => {
+    setModalDetails(details);
+    setShowModal(true);
   };
 
   if (error) {
@@ -51,7 +64,7 @@ const RequestDetails = () => {
   }
 
   if (!request) {
-    return <div className="container mt-5">Cargando solicitud...</div>;
+    return <div className="container mt-4">Cargando solicitud...</div>;
   }
 
   return (
@@ -63,7 +76,22 @@ const RequestDetails = () => {
           <li className="list-group-item"><strong>Fecha de Creación:</strong> {new Date(request.creationDate).toLocaleString()}</li>
           <li className="list-group-item"><strong>RUT del Cliente:</strong> {request.clientRut}</li>
           <li className="list-group-item"><strong>Tipo de Préstamo:</strong> {request.loanType}</li>
-          <li className="list-group-item"><strong>Estado:</strong> {request.currentStatus}</li>
+          <li
+            className="list-group-item"
+            style={{
+              backgroundColor: request.currentStatus === 'Rechazada' || request.currentStatus === 'Pendiente de Documentación' ? '#f8d7da' : 'inherit'
+            }}
+          >
+            <strong>Estado:</strong> 
+            <span style={{ color: 'black', fontWeight: 'bold', fontSize: '16px', textDecoration: 'underline' }}>
+              {request.currentStatus}
+            </span>
+            {(request.currentStatus === 'Rechazada' || request.currentStatus === 'Pendiente de Documentación') && (
+              <Button variant="primary" onClick={() => handleShowModal(request.details)}>
+                Ver detalles
+              </Button>
+            )}
+          </li>
           <li className="list-group-item"><strong>Ingreso Mensual:</strong> {request.monthlyIncome}</li>
           <li className="list-group-item"><strong>Monto del Préstamo:</strong> {request.loanAmount}</li>
           <li className="list-group-item"><strong>Años:</strong> {request.years}</li>
@@ -71,66 +99,159 @@ const RequestDetails = () => {
           <li className="list-group-item"><strong>Tasa de Interés Anual:</strong> {request.annualInterestRate}</li>
           <li className="list-group-item">
             <strong>Certificado de Avalúo:</strong>
-            <button className="document-button" onClick={() => showDocument(request.appraisalCertificate, 'appraisalCertificate')}>
-              {activeButton === 'appraisalCertificate' && showViewer ? 'Cerrar PDF' : 'Ver Documento'}
-            </button>
+            <div className="button-container">
+              <button className="document-button" onClick={() => showDocument(request.appraisalCertificate, 'appraisalCertificate')}>
+                {activeButton === 'appraisalCertificate' && showViewer ? 'Cerrar PDF' : 'Ver Documento'}
+              </button>
+            </div>
           </li>
           <li className="list-group-item">
             <strong>Comprobante de Ingresos:</strong>
-            <button className="document-button" onClick={() => showDocument(request.incomeProof, 'incomeProof')}>
-              {activeButton === 'incomeProof' && showViewer ? 'Cerrar PDF' : 'Ver Documento'}
-            </button>
+            <div className="button-container">
+              <button className="document-button" onClick={() => showDocument(request.incomeProof, 'incomeProof')}>
+                {activeButton === 'incomeProof' && showViewer ? 'Cerrar PDF' : 'Ver Documento'}
+              </button>
+            </div>
           </li>
-          {request.creditHistory && (
-            <li className="list-group-item">
-              <strong>Historial Crediticio:</strong>
-              <button className="document-button" onClick={() => showDocument(request.creditHistory, 'creditHistory')}>
-                {activeButton === 'creditHistory' && showViewer ? 'Cerrar PDF' : 'Ver Documento'}
+          <li className="list-group-item">
+            <strong>Cuenta de Ahorro:</strong>
+            <div className="button-container">
+              <button className="document-button" onClick={() => showDocument(request.savingsAccount, 'savingsAccount')}>
+                {activeButton === 'savingsAccount' && showViewer ? 'Cerrar PDF' : 'Ver Documento'}
               </button>
-            </li>
-          )}
-          {request.jobContract && (
-            <li className="list-group-item">
-              <strong>Contrato de Trabajo:</strong>
-              <button className="document-button" onClick={() => showDocument(request.jobContract, 'jobContract')}>
-                {activeButton === 'jobContract' && showViewer ? 'Cerrar PDF' : 'Ver Documento'}
-              </button>
-            </li>
-          )}
-          {request.remodelingBudget && (
-            <li className="list-group-item">
-              <strong>Presupuesto de Remodelación:</strong>
-              <button className="document-button" onClick={() => showDocument(request.remodelingBudget, 'remodelingBudget')}>
-                {activeButton === 'remodelingBudget' && showViewer ? 'Cerrar PDF' : 'Ver Documento'}
-              </button>
-            </li>
-          )}
-          {request.financialStatement && (
-            <li className="list-group-item">
-              <strong>Estado Financiero:</strong>
-              <button className="document-button" onClick={() => showDocument(request.financialStatement, 'financialStatement')}>
-                {activeButton === 'financialStatement' && showViewer ? 'Cerrar PDF' : 'Ver Documento'}
-              </button>
-            </li>
-          )}
-          {request.businessPlan && (
-            <li className="list-group-item">
-              <strong>Plan de Negocios:</strong>
-              <button className="document-button" onClick={() => showDocument(request.businessPlan, 'businessPlan')}>
-                {activeButton === 'businessPlan' && showViewer ? 'Cerrar PDF' : 'Ver Documento'}
-              </button>
-            </li>
-          )}
+            </div>
+          </li>
+          {(() => {
+            switch (request.loanType) {
+              case 1: {
+                return (
+                  <>
+                    {request.creditHistory && (
+                      <li className="list-group-item">
+                        <strong>Historial Crediticio:</strong>
+                        <div className="button-container">
+                          <button className="document-button" onClick={() => showDocument(request.creditHistory, 'creditHistory')}>
+                            {activeButton === 'creditHistory' && showViewer ? 'Cerrar PDF' : 'Ver Documento'}
+                          </button>
+                        </div>
+                      </li>
+                    )}
+                    {request.jobContract && (
+                      <li className="list-group-item">
+                        <strong>Contrato de Trabajo:</strong>
+                        <div className="button-container">
+                          <button className="document-button" onClick={() => showDocument(request.jobContract, 'jobContract')}>
+                            {activeButton === 'jobContract' && showViewer ? 'Cerrar PDF' : 'Ver Documento'}
+                          </button>
+                        </div>
+                      </li>
+                    )}
+                  </>
+                );
+              }
+              case 2: {
+                return (
+                  <>
+                    {request.firstHomeDeed && (
+                      <li className="list-group-item">
+                        <strong>Escritura de la Primera Vivienda:</strong>
+                        <div className="button-container">
+                          <button className="document-button" onClick={() => showDocument(request.firstHomeDeed, 'firstHomeDeed')}>
+                            {activeButton === 'firstHomeDeed' && showViewer ? 'Cerrar PDF' : 'Ver Documento'}
+                          </button>
+                        </div>
+                      </li>
+                    )}
+                    {request.creditHistory && (
+                      <li className="list-group-item">
+                        <strong>Historial Crediticio:</strong>
+                        <div className="button-container">
+                          <button className="document-button" onClick={() => showDocument(request.creditHistory, 'creditHistory')}>
+                            {activeButton === 'creditHistory' && showViewer ? 'Cerrar PDF' : 'Ver Documento'}
+                          </button>
+                        </div>
+                      </li>
+                    )}
+                    {request.jobContract && (
+                      <li className="list-group-item">
+                        <strong>Contrato de Trabajo:</strong>
+                        <div className="button-container">
+                          <button className="document-button" onClick={() => showDocument(request.jobContract, 'jobContract')}>
+                            {activeButton === 'jobContract' && showViewer ? 'Cerrar PDF' : 'Ver Documento'}
+                          </button>
+                        </div>
+                      </li>
+                    )}
+                  </>
+                );
+              }
+              case 3: {
+                return (
+                  <>
+                    {request.businessPlan && (
+                      <li className="list-group-item">
+                        <strong>Plan de Negocios:</strong>
+                        <div className="button-container">
+                          <button className="document-button" onClick={() => showDocument(request.businessPlan, 'businessPlan')}>
+                            {activeButton === 'businessPlan' && showViewer ? 'Cerrar PDF' : 'Ver Documento'}
+                          </button>
+                        </div>
+                      </li>
+                    )}
+                    {request.financialStatement && (
+                      <li className="list-group-item">
+                        <strong>Estado Financiero:</strong>
+                        <div className="button-container">
+                          <button className="document-button" onClick={() => showDocument(request.financialStatement, 'financialStatement')}>
+                            {activeButton === 'financialStatement' && showViewer ? 'Cerrar PDF' : 'Ver Documento'}
+                          </button>
+                        </div>
+                      </li>
+                    )}
+                  </>
+                );
+              }
+              case 4: {
+                return (
+                  <>
+                    {request.remodelingBudget && (
+                      <li className="list-group-item">
+                        <strong>Presupuesto de Remodelación:</strong>
+                        <div className="button-container">
+                          <button className="document-button" onClick={() => showDocument(request.remodelingBudget, 'remodelingBudget')}>
+                            {activeButton === 'remodelingBudget' && showViewer ? 'Cerrar PDF' : 'Ver Documento'}
+                          </button>
+                        </div>
+                      </li>
+                    )}
+                  </>
+                );
+              }
+              default: {
+                return null;
+              }
+            }
+          })()}
         </ul>
       </div>
-
       <div className="pdf-viewer">
         <iframe
-          src={pdfUrl + "#toolbar=0"}
+          src={pdfUrl + "#toolbar=1"}
           title="Documento PDF"
-          style={{ width: '85%', height: '100%' }}
+          style={{ width: '75%', height: '100%' }}
         />
       </div>
+      <Modal show={showModal} onHide={() => setShowModal(false)}>
+        <Modal.Header closeButton>
+          <Modal.Title>Notas del ejecutivo</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>{modalDetails}</Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={() => setShowModal(false)}>
+            Cerrar
+          </Button>
+        </Modal.Footer>
+      </Modal>
     </div>
   );
 };

@@ -27,6 +27,9 @@ public class RequestEntity {
     @Column(name = "appraisal_certificate")
     private byte[] appraisalCertificate;
 
+    @JdbcTypeCode(SqlTypes.BINARY)
+    @Column(name = "savings_account")
+    private byte[] savingsAccount;
 
     @Column(name = "client_rut")
     private String clientRut;
@@ -55,4 +58,9 @@ public class RequestEntity {
 
     @Column(name = "years")
     private Integer years;
+
+    // Will not be null only if the request is rejected or needs more information
+    @Column(name = "details")
+    private String details;
+
 }

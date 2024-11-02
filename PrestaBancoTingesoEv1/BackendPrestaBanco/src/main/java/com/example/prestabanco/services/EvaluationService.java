@@ -11,7 +11,7 @@ import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
+import java.util.Optional;
 
 @Service
 public class EvaluationService {
@@ -23,9 +23,11 @@ public class EvaluationService {
     private RequestRepository requestRepository;
     @Autowired
     private ClientRepository clientRepository;
+    @Autowired
+    private SavingCapacityService SavingCapacityService;
 
     public EvaluationEntity createEvaluation(RequestEntity request,
-                                             LocalDate creationSavingAccountDate,
+                                             String creationSavingAccountDate,
                                              boolean jobStatus,
                                              BigDecimal balance,
                                              BigDecimal sumAllDeposits,
@@ -38,10 +40,24 @@ public class EvaluationService {
                                              int numDepositsLast4Months,
                                              int numDepositsSecond4Months,
                                             boolean creditHistory,
-                                            BigDecimal sumAllDebts)
-                                              {
-        EvaluationEntity evaluation = new EvaluationEntity();
-        evaluation.setRequestId(Math.toIntExact(request.getId()));
+                                            BigDecimal sumAllDebts){
+        // Verify if the request exists
+        int requestId = Math.toIntExact(request.getId());
+        // Verify if the evaluation already exists
+        Optional<EvaluationEntity> evaluationOpt = evaluationRepository.findByRequestId(request.getId());
+
+        EvaluationEntity evaluation;
+        if (evaluationOpt.isPresent()) {
+            // If exists, replace "evaluation" with the existing evaluation
+            evaluation = evaluationOpt.get();
+        } else {
+            // If not, create a new evaluation
+            evaluation = new EvaluationEntity();
+        }
+
+        LocalDate creationDate = LocalDate.parse(creationSavingAccountDate);
+
+        evaluation.setRequestId(requestId);
         evaluation.setMonthlySalary(request.getMonthlyIncome());
         evaluation.setBalance(balance);
         evaluation.setBiggestWithdrawalLast12Months(biggestWithdrawalLast12Months);
@@ -49,7 +65,7 @@ public class EvaluationService {
         evaluation.setBalance12MonthsAgo(balance12MonthsAgo);
         evaluation.setBalanceAfterBW12Months(balanceAfterBw12Months);
         evaluation.setBalanceAfterBW6Months(balanceAfterBw6Months);
-        evaluation.setCreationSavingAccountDate(creationSavingAccountDate);
+        evaluation.setCreationSavingAccountDate(creationDate);
         evaluation.setCreditHistory(creditHistory);
         evaluation.setJobStatus(jobStatus);
         evaluation.setNumDepositsFirst4Months(numDepositsFirst4Months);
@@ -60,8 +76,7 @@ public class EvaluationService {
 
         calculateEvaluation(evaluation);
 
-
-        return evaluationRepository.save(evaluation);
+        return evaluation;
     }
 
 
@@ -69,7 +84,10 @@ public class EvaluationService {
     public void calculateEvaluation(EvaluationEntity evaluation) {
 
         // Find request by id
-        RequestEntity request = requestRepository.findById((long) evaluation.getRequestId()).orElse(null);
+        RequestEntity request = requestRepository.findById((long)evaluation.getRequestId()).orElse(null);
+        if (request == null) {
+            throw new IllegalArgumentException("Request not found with the provided ID");
+        }
         // Obtain the monthly payment
         BigDecimal monthlyPayment = request.getMonthlyPayment();
         // Calculate the cost to income ratio

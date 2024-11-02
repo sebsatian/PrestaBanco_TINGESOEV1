@@ -23,6 +23,7 @@ public class BusinessReqService {
                                                    byte[] financialStatement,
                                                    byte[] incomeProof,
                                                    byte[] appraisalCertificate,
+                                                   byte[] savingsAccount,
                                                    BigDecimal monthlyIncome) {
         int loanType = 3;
         BusinessReqEntity businessReq = new BusinessReqEntity();
@@ -34,6 +35,7 @@ public class BusinessReqService {
         businessReq.setBusinessPlan(businessPlan);
         businessReq.setIncomeProof(incomeProof);
         businessReq.setAppraisalCertificate(appraisalCertificate);
+        businessReq.setSavingsAccount(savingsAccount);
         businessReq.setCreationDate(java.time.LocalDateTime.now());
         businessReq.setLoanAmount(simulation.getLoanAmount());
         businessReq.setYears(simulation.getYears());

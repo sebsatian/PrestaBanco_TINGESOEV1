@@ -17,8 +17,8 @@ public class TotalCostsEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "simulation_id")
-    private int simulationId;
+    @Column(name = "request_id")
+    private int requestId;
 
     @Column(name = "credit_life_insurance")
     private BigDecimal creditLifeInsurance;
