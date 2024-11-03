@@ -62,7 +62,7 @@ const SavingCapacityDetails = () => {
   const handleCalculateTotalCosts = async () => {
     try {
       await requestService.postTotalCosts(id);
-      navigate(`/total-costs/${id}`);
+      navigate(`/total-costs/${id}`, { state: 'costos' });
     } catch (error) {
       console.error('Error al calcular los costos totales:', error);
       setError('No se pudo calcular los costos totales. Por favor, vuelva a intentarlo.');

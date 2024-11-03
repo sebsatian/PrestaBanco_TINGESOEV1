@@ -103,7 +103,7 @@ const TotalCosts = () => {
           <div><strong>Tasa de Interés Mensual:</strong> {loanType.annualInterestRate}%</div>
         </li>
         <li className="list-group-item d-flex justify-content-between align-items-center">
-          <div><strong>Seguro de Vida del Crédito:</strong> {formatAmount(totalCosts.creditLifeInsurance)} mensual</div>
+          <div><strong>Seguro de Desgravamen:</strong> {formatAmount(totalCosts.creditLifeInsurance)} mensual</div>
           <Button variant="primary" size="sm" style={{ marginLeft: '60px' }} onClick={() => handleShowModal('Mensualmente se suma el 0,03% del monto mensual previo a comisiones')}>
             Ver Detalles
           </Button>
