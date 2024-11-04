@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { useParams, useLocation } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import requestService from '../services/request.service';
-import loanTypeService from '../services/loanType.service';
+import loanTypeService from '../services/loantype.service';
 import { Modal, Button, Form } from 'react-bootstrap';
 
 const TotalCosts = () => {

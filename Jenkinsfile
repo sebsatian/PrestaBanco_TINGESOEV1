@@ -2,6 +2,7 @@ pipeline {
     agent any
     tools {
         maven 'maven_3_8_1'
+        nodejs 'node'
     }
     stages {
 
@@ -19,6 +20,7 @@ pipeline {
                     } else {
                         bat 'cd BackendPrestaBanco && mvn clean package'
                     }
+                    
                 }
             }
         }
@@ -35,6 +37,14 @@ pipeline {
         }
         stage('Push backend') {
             steps {
+
+                script {
+                    if (isUnix()) {
+                        sh 'docker build -t sebsatian/backend-prestabanco:latest BackendPrestaBanco'
+                    } else {
+                        bat 'docker build -t sebsatian/backend-prestabanco:latest BackendPrestaBanco'
+                    }
+                }
                 withCredentials([string(credentialsId: 'dockerhubpassword', variable: 'dockerpw')]) {
                     script {
                         if (isUnix()) {
@@ -55,17 +65,33 @@ pipeline {
         }
         stage('Build frontend') {
             steps {
+                script
+                {
+                    if (isUnix()) {
+                        sh 'cd FrontendPrestaBanco && npm install vite'
+                    } else {
+                        bat 'cd FrontendPrestaBanco && npm install vite'
+                    }
+                }
                 script {
                     if (isUnix()) {
-                        sh 'cd FrontendPrestaBanco && docker build -t sebsatian/frontend-prestabanco:latest .'
+                        sh 'cd FrontendPrestaBanco && npm run build -t sebsatian/frontend-prestabanco:latest .'
                     } else {
-                        bat 'cd FrontendPrestaBanco && docker build -t sebsatian/frontend-prestabanco:latestt .'
+                        bat 'cd FrontendPrestaBanco && npm run build -t sebsatian/frontend-prestabanco:latestt .'
                     }
                 }
             }
         }
         stage('Push frontend') {
             steps {
+                script {
+                    if (isUnix()) {
+                        sh 'docker build -t sebsatian/frontend-prestabanco:latest FrontendPrestaBanco'
+                    } else {
+                        bat 'docker build -t sebsatian/frontend-prestabanco:latest FrontendPrestaBanco'
+                    }
+                }
+
                 withCredentials([string(credentialsId: 'dockerhubpassword', variable: 'dockerpw')]) {
                     script {
                         if (isUnix()) {
@@ -73,6 +99,13 @@ pipeline {
                         } else {
                             bat 'docker login -u sebsatian -p %dockerpw%'
                         }
+                    }
+                }
+                script {
+                    if (isUnix()) {
+                        sh 'docker push sebsatian/frontend-prestabanco:latest'
+                    } else {
+                        bat 'docker push sebsatian/frontend-prestabanco:latest'
                     }
                 }
             }
