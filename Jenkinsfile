@@ -65,19 +65,11 @@ pipeline {
         }
         stage('Build frontend') {
             steps {
-                script
-                {
-                    if (isUnix()) {
-                        sh 'cd FrontendPrestaBanco && npm install vite'
-                    } else {
-                        bat 'cd FrontendPrestaBanco && npm install vite'
-                    }
-                }
                 script {
                     if (isUnix()) {
-                        sh 'cd FrontendPrestaBanco && npm run build -t sebsatian/frontend-prestabanco:latest .'
+                        sh 'cd FrontendPrestaBanco && npm run build'
                     } else {
-                        bat 'cd FrontendPrestaBanco && npm run build -t sebsatian/frontend-prestabanco:latestt .'
+                        bat 'cd FrontendPrestaBanco && npm run build'
                     }
                 }
             }
