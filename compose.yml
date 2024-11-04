@@ -32,7 +32,7 @@ services:
   backend1:
     image: sebsatian/backend-prestabanco:latest
     environment:
-      - DB_HOST=192.168.100.34 
+      - DB_HOST=192.168.100.21
       - DB_PORT=5432
       - DB_USER=postgres
       - DB_PASSWORD=admin
@@ -43,7 +43,7 @@ services:
   backend2:
     image: sebsatian/backend-prestabanco:latest
     environment:
-      - DB_HOST=192.168.100.34
+      - DB_HOST=192.168.100.21
       - DB_PORT=5432
       - DB_USER=postgres
       - DB_PASSWORD=admin
@@ -54,7 +54,7 @@ services:
   backend3:
     image: sebsatian/backend-prestabanco:latest
     environment:
-      - DB_HOST=192.168.100.34
+      - DB_HOST=192.168.100.21
       - DB_PORT=5432
       - DB_USER=postgres
       - DB_PASSWORD=admin
