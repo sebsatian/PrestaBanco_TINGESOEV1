@@ -17,6 +17,9 @@ services:
   # Frontend services
   frontend1:
     image: sebsatian/frontend-prestabanco:latest
+    environment:
+      VITE_PRESTABANCO_BACKEND_SERVER: ${VITE_PRESTABANCO_BACKEND_SERVER}
+      VITE_PRESTABANCO_BACKEND_PORT: ${VITE_PRESTABANCO_BACKEND_PORT}
     networks:
       - frontend-network
 
