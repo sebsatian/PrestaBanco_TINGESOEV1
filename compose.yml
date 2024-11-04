@@ -9,6 +9,8 @@ services:
       POSTGRES_PASSWORD: admin
     ports:
       - "5432:5432"
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
     networks:
       - backend-network
 
@@ -32,33 +34,39 @@ services:
   backend1:
     image: sebsatian/backend-prestabanco:latest
     environment:
-      - DB_HOST=192.168.100.21
+      - DB_HOST=postgres-prestabancodb
       - DB_PORT=5432
       - DB_USER=postgres
       - DB_PASSWORD=admin
       - DB_NAME=PrestaBancoDB
+    depends_on:
+      - postgres
     networks:
       - backend-network
 
   backend2:
     image: sebsatian/backend-prestabanco:latest
     environment:
-      - DB_HOST=192.168.100.21
+      - DB_HOST=postgres-prestabancodb
       - DB_PORT=5432
       - DB_USER=postgres
       - DB_PASSWORD=admin
       - DB_NAME=PrestaBancoDB
+    depends_on:
+      - postgres  
     networks:
       - backend-network
 
   backend3:
     image: sebsatian/backend-prestabanco:latest
     environment:
-      - DB_HOST=192.168.100.21
+      - DB_HOST=postgres-prestabancodb
       - DB_PORT=5432
       - DB_USER=postgres
       - DB_PASSWORD=admin
       - DB_NAME=PrestaBancoDB
+    depends_on:
+      - postgres
     networks:
       - backend-network
 
@@ -93,3 +101,6 @@ services:
 networks:
   frontend-network:
   backend-network:
+
+volumes:
+  postgres-data:
