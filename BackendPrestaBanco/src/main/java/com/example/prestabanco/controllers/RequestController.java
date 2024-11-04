@@ -12,7 +12,7 @@ import java.util.Optional;
 @RestController
 @RequestMapping("/requests")
 @CrossOrigin("*")
-public class RequestController {
+public class    RequestController {
     @Autowired
     private RequestRepository requestRepository;
     @Autowired
