@@ -35,12 +35,12 @@ pipeline {
         }
         stage('Push backend') {
             steps {
-                withCredentials([string(credentialsId: 'dckrpass', variable: 'dckr-psw')]) {
+                withCredentials([string(credentialsId: 'dockerhubpassword', variable: 'dockerpw')]) {
                     script {
                         if (isUnix()) {
-                            sh 'docker login -u sebsatian -p $dckr-psw'
+                            sh 'docker login -u sebsatian -p ${dockerpw}'
                         } else {
-                            bat 'docker login -u sebsatian -p %dckr-psw%'
+                            bat 'docker login -u sebsatian -p %dockerpw%'
                         }
                     }
                 }
@@ -66,12 +66,12 @@ pipeline {
         }
         stage('Push frontend') {
             steps {
-                withCredentials([string(credentialsId: 'dckrpass', variable: 'dckr-psw')]) {
+                withCredentials([string(credentialsId: 'dockerhubpassword', variable: 'dockerpw')]) {
                     script {
                         if (isUnix()) {
-                            sh 'docker login -u sebsatian -p $dckr-psw'
+                            sh 'docker login -u sebsatian -p ${dockerpw}'
                         } else {
-                            bat 'docker login -u sebsatian -p %dckr-psw%'
+                            bat 'docker login -u sebsatian -p %dockerpw%'
                         }
                     }
                 }
