@@ -13,7 +13,7 @@ function MainPage() {
       <div className="container">
         <h1>PrestaBanco - Créditos Hipotecarios</h1>
         <Link to="/register">
-          <button className="action-button">Registrar Cliente</button>
+          <button className="action-button">Registrarr Cliente</button>
         </Link>
         <Link to="/simulate">
           <button className="action-button">Simular un crédito</button>
