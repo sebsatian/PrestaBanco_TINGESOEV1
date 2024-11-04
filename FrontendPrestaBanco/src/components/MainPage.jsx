@@ -19,7 +19,7 @@ function MainPage() {
           <button className="action-button">Simular un crédito y Pedir Préstamo</button>
         </Link>
         <Link to="/loan-types/view">
-          <button className="action-button">Tasa de interés anual</button>
+          <button className="action-button">Tasa de interés Anual</button>
         </Link>
         <Link to="/view-requests" state={{ from: 'ejecutivo' }}>
           <button className="action-button">Ejecutivo</button>
