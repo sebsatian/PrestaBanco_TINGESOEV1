@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useParams, useNavigate, useLocation } from 'react-router-dom';
 import requestService from '../services/request.service.js';
-import loanTypeService from '../services/loanType.service.js';
+import loanTypeService from '../services/loantype.service.js';
 import { Modal, Button } from 'react-bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import '../styles/RequestDetails.css';
