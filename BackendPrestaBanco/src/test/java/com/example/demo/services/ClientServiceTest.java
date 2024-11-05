@@ -45,4 +45,28 @@ public class ClientServiceTest {
         // Then
         assertThat(clientTest).isEqualTo(client);
     }
+
+    @Test
+    void whenRegisterClient_thenError() {
+        // Given
+        ClientEntity client = new ClientEntity();
+        client.setId(1L);
+        client.setRut("12.345.678-2");
+        client.setName("Raul");
+        client.setPassword("1234");
+        client.setBirthDate(LocalDate.parse("1990-01-01"));
+
+        // Simula que existe un cliente con el mismo RUT en el repositorio
+        when(clientRepository.findClientByRut("12.345.678-2")).thenReturn(client);
+
+        // When
+        try {
+            clientService.registerClient(client);
+        } catch (RuntimeException e) {
+            // Then
+            assertThat(e.getMessage()).isEqualTo("El RUT ya está registrado");
+        }
+    }
+
+
 }
