@@ -15,8 +15,6 @@ public class BusinessReqService {
     @Autowired
     private BusinessReqRepository businessReqRepository;
     @Autowired
-    private SimulationRepository simulationRepository;
-    @Autowired
     private ClientRepository clientRepository;
     public BusinessReqEntity createBusinessRequest(SimulationEntity simulation,
                                                    byte[] businessPlan,

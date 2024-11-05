@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.time.Period;
 
 @Service
 public class SavingCapacityService {
@@ -64,9 +65,7 @@ public class SavingCapacityService {
         BigDecimal balance12MonthsAgo = evaluation.getBalance12MonthsAgo();
 
         // If the balance after the biggest withdrawal last 12 months is greater than the biggest withdrawal last 12 months
-        // and the balance is greater than 12 months ago
-        if (biggestWithdrawalLast12Months.compareTo(balanceAfterBw12Months) > 0 &&
-                evaluation.getBalance().compareTo(balance12MonthsAgo) > 0) {
+        if (biggestWithdrawalLast12Months.compareTo(balanceAfterBw12Months) > 0) {
             savingCapacity.setConsistentHistory(true);
         } else {
             savingCapacity.setConsistentHistory(false);
@@ -106,12 +105,8 @@ public class SavingCapacityService {
 
         // Calculate the years the client has with the savings account
         LocalDate currentDate = LocalDate.now();
-        int years = currentDate.getYear() - creationSavingAccountDate.getYear();
-        if (currentDate.getMonthValue() < creationSavingAccountDate.getMonthValue() ||
-                (currentDate.getMonthValue() == creationSavingAccountDate.getMonthValue() &&
-                        currentDate.getDayOfMonth() < creationSavingAccountDate.getDayOfMonth())) {
-            years--;
-        }
+        Period period = Period.between(creationSavingAccountDate, currentDate);
+        int years = period.getYears();
 
         // Obtain the 20% of the loan amount by multiplying the 10% of the loan amount by 2
         BigDecimal twentyPercentOfLoanAmount = tenPercentOfLoanAmount.multiply(BigDecimal.valueOf(2));

@@ -115,16 +115,18 @@ public class EvaluationService {
         // Calculate the in_age
         // Get the client's age
         ClientEntity client = clientRepository.findClientByRut(request.getClientRut());
-        LocalDate dob = client.getBirthDate();
+        if (client == null) {
+            throw new IllegalArgumentException("Client not found with the provided RUT");
+        }
+        LocalDate dob;
         double age = 0;
         // Calculate the exact age of the client
-        if (dob != null) {
+        if ( (dob = client.getBirthDate()) != null) {
             age = LocalDate.now().getYear() - dob.getYear();
             if (LocalDate.now().getDayOfYear() < dob.getDayOfYear()) {
                 age--;
             }
         }
-
         // If the client is older than 70, set in_age to false
         if (age > 70) {
             evaluation.setInAge(false);

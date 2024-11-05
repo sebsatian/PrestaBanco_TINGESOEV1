@@ -14,15 +14,6 @@ public class ClientService {
     @Autowired
     ClientRepository clientRepository;
 
-    // Obtain all clients
-    public ArrayList<ClientEntity> getAllClients() {
-        return (ArrayList<ClientEntity>) clientRepository.findAll();
-    }
-
-    // Obtain a client by its ID
-    public Optional<ClientEntity> getClientById(Long id) {
-        return clientRepository.findById(id);
-    }
 
     public ClientEntity registerClient(ClientEntity client) {
         // Verify that the client does not already exist

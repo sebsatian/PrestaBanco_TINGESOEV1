@@ -23,16 +23,6 @@ public class SimulationService {
     @Autowired
     private LoanTypeRepository loanTypeRepository;
 
-
-    public SimulationEntity getSimulationByClientId(Long clientId) {
-        Optional<SimulationEntity> simulationOpt = simulationRepository.findByClientId(clientId);
-        if (simulationOpt.isPresent()) {
-            return simulationOpt.get();
-        } else {
-            throw new IllegalArgumentException("Simulation not found for client with ID: " + clientId);
-        }
-    }
-
     public SimulationEntity calculateMontlyPayment(String rut, int propertyValue, Long loanType, int years, float percentage){
         // Obtain the client ID by RUT
         ClientEntity client = clientRepository.findClientByRut(rut);
@@ -114,7 +104,7 @@ public class SimulationService {
         existingSimulation.setMonthlyPayment(updatedValues.getMonthlyPayment());
         existingSimulation.setPercentage(updatedValues.getPercentage());
         existingSimulation.setFinalAmount(updatedValues.getFinalAmount());
-        existingSimulation.setLoanType(loanType.intValue()); // Asegúrate de actualizar el loanType
+        existingSimulation.setLoanType(loanType.intValue());
 
         // Save the updated simulation to the database
         simulationRepository.save(existingSimulation);
