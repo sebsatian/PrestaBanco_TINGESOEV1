@@ -17,22 +17,26 @@ services:
   # Frontend services
   frontend1:
     image: sebsatian/frontend-prestabanco:latest
+    container_name: frontend-prestabanco1
     networks:
       - frontend-network
 
   frontend2:
     image: sebsatian/frontend-prestabanco:latest
+    container_name: frontend-prestabanco2
     networks:
       - frontend-network
 
   frontend3:
     image: sebsatian/frontend-prestabanco:latest
+    container_name: frontend-prestabanco3
     networks:
       - frontend-network
 
   # Backend services
   backend1:
     image: sebsatian/backend-prestabanco:latest
+    container_name: backend-prestabanco1
     environment:
       - DB_HOST=postgres-prestabancodb
       - DB_PORT=5432
@@ -46,6 +50,7 @@ services:
 
   backend2:
     image: sebsatian/backend-prestabanco:latest
+    container_name: backend-prestabanco2
     environment:
       - DB_HOST=postgres-prestabancodb
       - DB_PORT=5432
@@ -59,6 +64,7 @@ services:
 
   backend3:
     image: sebsatian/backend-prestabanco:latest
+    container_name: backend-prestabanco3
     environment:
       - DB_HOST=postgres-prestabancodb
       - DB_PORT=5432
@@ -73,6 +79,7 @@ services:
   # Nginx for frontend load balancing
   nginx-frontend:
     image: nginx:latest
+    container_name: nginx-frontend
     ports:
       - "8070:80"
     volumes:
@@ -87,8 +94,9 @@ services:
   # Nginx for backend load balancing
   nginx-backend:
     image: nginx:latest
+    container_name: nginx-backend
     ports:
-      - "8090:8090"
+      - "8090:80"
     volumes:
       - ./nginx-backend.conf:/etc/nginx/nginx.conf
     depends_on:
@@ -98,9 +106,26 @@ services:
     networks:
       - backend-network
 
+  # Jenkins service
+  jenkins:
+    image: sebsatian/jenkins-custom:latest  # Reemplaza con la imagen subida a Docker Hub
+    container_name: jenkins-custom
+    ports:
+      - "8080:8080"  # Port for Jenkins web interface
+      - "50000:50000"  # Port for Jenkins agent communication
+    volumes:
+      - jenkins_home:/var/jenkins_home  # Persistent volume for Jenkins data
+      - /var/run/docker.sock:/var/run/docker.sock  # Mount Docker socket to allow Jenkins to run Docker commands
+    networks:
+      - backend-network  # Connect to the backend network
+      - frontend-network  # Connect to the frontend network
+    environment:
+      - JAVA_OPTS=-Djenkins.install.runSetupWizard=false  # Skip the initial setup wizard
+
 networks:
   frontend-network:
   backend-network:
 
 volumes:
   postgres-data:
+  jenkins_home:
