@@ -61,11 +61,17 @@ public class SavingCapacityService {
         BigDecimal biggestWithdrawalLast12Months = evaluation.getBiggestWithdrawalLast12Months();
         BigDecimal balanceAfterBw12Months = evaluation.getBalanceAfterBW12Months();
 
-        //Obtain the balance 12 months ago
-        BigDecimal balance12MonthsAgo = evaluation.getBalance12MonthsAgo();
 
+        // Obtain the balance 12 months ago and the current balance
+        BigDecimal balance12MonthsAgo = evaluation.getBalance12MonthsAgo();
+        BigDecimal balance = evaluation.getBalance();
+
+        System.out.println("biggest withdrawal last 12 months: " + biggestWithdrawalLast12Months);
+        System.out.println("balance after bw 12 months: " + balanceAfterBw12Months);
+        System.out.println("balance 12 months ago: " + balance12MonthsAgo);
         // If the balance after the biggest withdrawal last 12 months is greater than the biggest withdrawal last 12 months
-        if (biggestWithdrawalLast12Months.compareTo(balanceAfterBw12Months) > 0) {
+        if (balanceAfterBw12Months.compareTo(biggestWithdrawalLast12Months) > 0 && balance.compareTo(balance12MonthsAgo)> 0) {
+
             savingCapacity.setConsistentHistory(true);
         } else {
             savingCapacity.setConsistentHistory(false);
@@ -107,7 +113,6 @@ public class SavingCapacityService {
         LocalDate currentDate = LocalDate.now();
         Period period = Period.between(creationSavingAccountDate, currentDate);
         int years = period.getYears();
-
         // Obtain the 20% of the loan amount by multiplying the 10% of the loan amount by 2
         BigDecimal twentyPercentOfLoanAmount = tenPercentOfLoanAmount.multiply(BigDecimal.valueOf(2));
 
