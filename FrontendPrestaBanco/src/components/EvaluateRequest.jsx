@@ -64,7 +64,7 @@ const EvaluateRequest = () => {
   
     // Formatear los campos específicos
     if ([
-      'saldo',
+      'balance',
       'sumAllDebts',
       'sumAllDeposits',
       'balance12MonthsAgo',
@@ -334,10 +334,10 @@ const EvaluateRequest = () => {
             />
           </div>
           <div className="form-group mt-3">
-            <label htmlFor="jobStatus">Estado Laboral</label>
+            <label htmlFor="jobStatus">Marcar si el cliente tiene estabilidad laboral y económica</label>
             <input
               type="checkbox"
-              className="form-check-input"
+              className="form-check-input border border-primary shadow-sm"
               id="jobStatus"
               name="jobStatus"
               checked={formData.jobStatus}
@@ -357,10 +357,10 @@ const EvaluateRequest = () => {
             />
           </div>
           <div className="form-group mt-3">
-            <label htmlFor="creditHistory">Historial Crediticio</label>
+            <label htmlFor="creditHistory">Marcar si el cliente NO tiene morosidades importantes</label>
             <input
               type="checkbox"
-              className="form-check-input"
+              className="form-check-input border border-primary shadow-sm"
               id="creditHistory"
               name="creditHistory"
               checked={formData.creditHistory}
