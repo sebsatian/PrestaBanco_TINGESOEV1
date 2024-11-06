@@ -9,6 +9,6 @@ VALUES
 -- Propiedades Comerciales
 (3, 'Propiedades Comerciales', 25, 0.60, 5.0, 7.0, 7.0),
 
--- Remodelación
+-- Remodelación  
 (4, 'Remodelación', 15, 0.50, 4.5, 6.0, 6.0);
 
