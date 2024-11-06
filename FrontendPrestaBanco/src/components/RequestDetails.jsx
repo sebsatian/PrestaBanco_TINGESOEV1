@@ -137,7 +137,7 @@ const RequestDetails = () => {
           <li className="list-group-item"><strong>Ingreso Mensual:</strong> {formatAmount(request.monthlyIncome)}</li>
           <li className="list-group-item"><strong>Monto del Préstamo:</strong> {formatAmount(request.loanAmount)}</li>
           <li className="list-group-item"><strong>Años:</strong> {request.years}</li>
-          <li className="list-group-item"><strong>Pago Mensual:</strong> {formatAmount(request.monthlyPayment)}</li>
+          <li className="list-group-item"><strong>Pago Mensual (sujeto a cambios):</strong> {formatAmount(request.monthlyPayment)}</li>
           <li className="list-group-item"><strong>Tasa de Interés Anual:</strong> {formatPercentage(request.annualInterestRate)}</li>
           <li className="list-group-item">
             <strong>Certificado de Avalúo:</strong>
