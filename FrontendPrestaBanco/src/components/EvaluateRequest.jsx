@@ -54,14 +54,33 @@ const EvaluateRequest = () => {
     }
   }, [id]);
 
+  const formatCurrency = (value) => {
+    if (!value) return '';
+    return '$' + value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+  };
   const handleInputChange = (e) => {
     const { name, value, type, checked } = e.target;
+    let formattedValue = value;
+  
+    // Formatear los campos específicos
+    if ([
+      'saldo',
+      'sumAllDebts',
+      'sumAllDeposits',
+      'balance12MonthsAgo',
+      'biggestWithdrawalLast12Months',
+      'balanceAfterBw12Months',
+      'biggestWithdrawalLast6Months',
+      'balanceAfterBw6Months'
+    ].includes(name)) {
+      formattedValue = formatCurrency(value.replace(/\D/g, '')); 
+    }
+  
     setFormData((prevFormData) => ({
       ...prevFormData,
-      [name]: type === 'checkbox' ? checked : value,
+      [name]: type === 'checkbox' ? checked : formattedValue,
     }));
   };
-
   const formatToNumber = (value) => {
     return parseFloat(value.replace(/[^0-9.-]+/g, ''));
   };
