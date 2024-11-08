@@ -107,7 +107,7 @@ const RequestDetails = () => {
       <div className="request-details" style={{ width: showViewer ? '40%' : '40%' }}>
         <div className="d-flex justify-content-end">
           <Button variant="danger" onClick={handleCancelRequest} className="mb-3">
-            Cancelar Solicitud
+            Cancelar Solicitud Chile
           </Button>
         </div>
         <h2>Detalles de la Solicitud</h2>
